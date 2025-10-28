@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+/* index.css or global */
+@keyframes marquee-once {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+.animate-marquee-once {
+  animation: marquee-once 15s linear 1;
+}
+
+/* Responsive utilities */
+@media (max-width: 640px) {
+  .text-responsive {
+    font-size: 0.875rem;
+  }
+  
+  .p-responsive {
+    padding: 1rem;
+  }
+  
+  .gap-responsive {
+    gap: 0.75rem;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .text-responsive {
+    font-size: 1rem;
+  }
+  
+  .p-responsive {
+    padding: 1.5rem;
+  }
+  
+  .gap-responsive {
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 1025px) {
+  .text-responsive {
+    font-size: 1.125rem;
+  }
+  
+  .p-responsive {
+    padding: 2rem;
+  }
+  
+  .gap-responsive {
+    gap: 1.5rem;
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus styles for accessibility */
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

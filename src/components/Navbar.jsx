@@ -1,0 +1,751 @@
+import React, { useState, useCallback, useEffect } from 'react';
+import { FaChevronDown, FaSearch, FaBars, FaTimes, FaEnvelope, FaBell, FaUser, FaGraduationCap, FaBookOpen, FaHome, FaInfoCircle, FaUniversity, FaUsers, FaChartLine } from 'react-icons/fa';
+import { useAccordion } from '../hooks/useAccordion';
+import MobileAccordion from './navbar/MobileAccordion';
+import MenuItem from './navbar/MenuItem';
+import ApiService from '../services/api';
+import {
+  TOP_NAV_LINKS,
+  ABOUT_US_MENU,
+  ACADEMICS_MENU,
+  CAMPUS_LIFE_MENU,
+  ADMISSIONS_SCHOOLS,
+  ADMISSION_BUTTONS
+} from '../constants/data';
+
+const Navbar = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [notificationVisible, setNotificationVisible] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [stats, setStats] = useState({
+    totalStudents: 0,
+    totalCourses: 0,
+    unreadMessages: 0,
+    totalMessages: 0,
+    recentStudents: [],
+    recentCourses: []
+  });
+  const [loading, setLoading] = useState(false);
+
+  const accordionKeys = [
+    'admissions', 'aboutUs', 'campusLife', 'academics',
+    'aboutSgv', 'leadership', 'academicsSgv', 'disciplines',
+    'campusSgv', 'studentLife', ...ADMISSIONS_SCHOOLS.map((_, i) => `school_${i}`)
+  ];
+  const [accordionStates, toggleAccordion, closeAllAccordions] = useAccordion(accordionKeys);
+
+  const handleMenuClose = useCallback(() => {
+    setMenuOpen(false);
+    closeAllAccordions();
+  }, [closeAllAccordions]);
+
+  const handleSearchToggle = useCallback(() => {
+    setSearchOpen((prev) => !prev);
+    if (!searchOpen) {
+      setSearchQuery('');
+      setSearchResults([]);
+    }
+  }, [searchOpen]);
+
+  // Load stats on component mount
+  useEffect(() => {
+    const loadStats = async () => {
+      setLoading(true);
+      try {
+        const dashboardStats = await ApiService.getDashboardStats();
+        
+        setStats({
+          totalStudents: dashboardStats.totalStudents,
+          totalCourses: dashboardStats.totalCourses,
+          unreadMessages: dashboardStats.unreadMessages,
+          totalMessages: dashboardStats.totalMessages,
+          recentStudents: dashboardStats.students.slice(0, 3),
+          recentCourses: dashboardStats.courses.slice(0, 3)
+        });
+      } catch (error) {
+        console.error('Error loading stats:', error);
+        // Set fallback values
+        setStats({
+          totalStudents: 0,
+          totalCourses: 0,
+          unreadMessages: 0,
+          totalMessages: 0,
+          recentStudents: [],
+          recentCourses: []
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadStats();
+  }, []);
+
+  const handleSearch = useCallback(async (query) => {
+    if (!query.trim()) {
+      setSearchResults([]);
+      return;
+    }
+    
+    setIsSearching(true);
+    try {
+      const [studentsResults, coursesResults] = await Promise.all([
+        ApiService.searchStudents(query),
+        ApiService.searchCourses(query)
+      ]);
+      
+      setSearchResults({
+        students: studentsResults.data || [],
+        courses: coursesResults.data || []
+      });
+    } catch (error) {
+      console.error('Search error:', error);
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  }, []);
+
+  const handleSearchInputChange = useCallback((e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    
+    // Debounce search
+    const timeoutId = setTimeout(() => {
+      handleSearch(query);
+    }, 300);
+    
+    return () => clearTimeout(timeoutId);
+  }, [handleSearch]);
+
+  const renderAdmissionsDropdown = () => {
+    const col1 = ADMISSIONS_SCHOOLS.slice(0, 5);
+    const col2 = ADMISSIONS_SCHOOLS.slice(5, 10);
+    const col3 = ADMISSIONS_SCHOOLS.slice(10);
+
+    return (
+      <div className="absolute -translate-x-3/4 top-full hidden group-hover:block bg-white shadow-lg p-6 min-w-max z-10 w-[1200px] rounded-md border-t-4 border-blue-900">
+        <div className="grid grid-cols-3 gap-4">
+          {[col1, col2, col3].map((column, colIndex) => (
+            <div key={colIndex}>
+              {column.map((school) => (
+                <React.Fragment key={school.title}>
+                  <h5 className="font-bold mb-2 uppercase text-[#2358cc] text-base mt-4 first:mt-0">
+                    {school.title}
+                  </h5>
+                  <ul>
+                    {school.programs.map((program) => (
+                      <MenuItem key={program} text={program} />
+                    ))}
+                  </ul>
+                </React.Fragment>
+              ))}
+            </div>
+          ))}
+        </div>
+        <div className="flex flex-wrap gap-4 mt-8 justify-start">
+          {ADMISSION_BUTTONS.map((btn) => (
+            <div
+              key={btn.text}
+              className={`${btn.color} text-white px-6 py-3 rounded-full hover:bg-blue-700 cursor-pointer flex items-center font-bold text-base shadow`}
+            >
+              <span>{btn.text}</span>
+              <span className="ml-2">→</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  const renderMobileAdmissionsMenu = () => (
+    <MobileAccordion
+      title="Admissions"
+      isOpen={accordionStates.admissions}
+      onToggle={() => toggleAccordion('admissions')}
+    >
+      {ADMISSIONS_SCHOOLS.map((school, index) => (
+        <MobileAccordion
+          key={school.title}
+          title={school.title}
+          isOpen={accordionStates[`school_${index}`]}
+          onToggle={() => toggleAccordion(`school_${index}`)}
+        >
+          {school.programs.map((program) => (
+            <li key={program}>
+              <span className="block px-2 py-1 hover:bg-blue-900 hover:text-white cursor-pointer">
+                {program}
+              </span>
+            </li>
+          ))}
+        </MobileAccordion>
+      ))}
+    </MobileAccordion>
+  );
+
+  return (
+    <header className="bg-white shadow-md sticky top-0 z-50 font-sans">
+      <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 text-white py-3 px-2 sm:px-4 flex flex-col sm:flex-row flex-wrap justify-between items-center text-xs sm:text-sm gap-2 shadow-lg">
+        <div className="flex items-center space-x-4">
+          <span className="bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1.5 rounded-full font-bold cursor-pointer text-xs sm:text-sm shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
+            📞 Contact: 9414791273
+          </span>
+          <div className="hidden sm:flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-3 py-1">
+            <FaUser className="text-yellow-300" />
+            <span className="text-yellow-300 font-semibold">{stats.totalStudents}+ Students</span>
+          </div>
+        </div>
+        <div className="flex items-center space-x-2">
+          <span className="text-white hover:text-yellow-300 transition-colors cursor-pointer text-xs sm:text-sm flex items-center">
+            <FaEnvelope className="inline mr-1 text-yellow-300" /> admissions@kishangarhgirlscollege.com
+          </span>
+        </div>
+        <nav className="hidden md:flex">
+          <ul className="flex space-x-2 sm:space-x-4">
+            {TOP_NAV_LINKS.map((txt) => (
+              <li key={txt}>
+                <span className="hover:text-yellow-300 transition-colors cursor-pointer text-xs sm:text-sm font-medium">{txt}</span>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+
+      <div className="py-3 sm:py-4 px-2 sm:px-4 flex flex-col sm:flex-row items-center justify-between bg-gradient-to-r from-gray-50 to-blue-50 border-b-2 border-blue-900 gap-4 sm:gap-0 shadow-sm">
+        <div className="flex items-center space-x-3 sm:space-x-4">
+          <div className="flex items-center space-x-2">
+            <img
+              loading="lazy"
+              src="/kishangarh-logo.svg"
+              alt="Kishangarh Girls College Logo"
+              className="h-10 sm:h-12 cursor-pointer hover:scale-105 transition-transform duration-300"
+            />
+            <div className="hidden sm:block">
+              <div className="text-blue-900 font-bold text-sm sm:text-base">
+              
+              </div>
+              <div className="text-blue-900 font-bold text-sm sm:text-base">
+               
+              </div>
+            </div>
+          </div>
+          {/* <div className="hidden lg:flex items-center space-x-4 bg-white/90 backdrop-blur-sm rounded-full px-6 py-3 shadow-lg border border-blue-200">
+            <div className="flex items-center space-x-2">
+              <div className="bg-blue-100 p-2 rounded-full">
+                <FaUsers className="text-blue-600 text-sm" />
+              </div>
+              <div className="text-center">
+                <div className="text-blue-900 font-bold text-lg">{loading ? '...' : stats.totalStudents}</div>
+                <div className="text-blue-700 text-xs">Students</div>
+              </div>
+            </div>
+            <div className="w-px h-8 bg-blue-300"></div>
+            <div className="flex items-center space-x-2">
+              <div className="bg-green-100 p-2 rounded-full">
+                <FaBookOpen className="text-green-600 text-sm" />
+              </div>
+              <div className="text-center">
+                <div className="text-green-900 font-bold text-lg">{loading ? '...' : stats.totalCourses}</div>
+                <div className="text-green-700 text-xs">Courses</div>
+              </div>
+            </div>
+            <div className="w-px h-8 bg-blue-300"></div>
+            <div className="flex items-center space-x-2">
+              <div className="bg-orange-100 p-2 rounded-full">
+                <FaBell className="text-orange-600 text-sm" />
+              </div>
+              <div className="text-center">
+                <div className="text-orange-900 font-bold text-lg">{loading ? '...' : stats.unreadMessages}</div>
+                <div className="text-orange-700 text-xs">New</div>
+              </div>
+            </div>
+          </div> */}
+        </div>
+
+        <nav className="hidden md:flex flex-grow justify-center">
+          <ul className="flex space-x-6 font-semibold items-center">
+            <li className="relative group rounded-md">
+              <span className="flex items-center px-3 py-1 cursor-pointer text-blue-900 group-hover:bg-blue-900 group-hover:text-white transition-colors duration-200">
+                About Us <FaChevronDown className="ml-1 text-sm" />
+              </span>
+              <div className="absolute left-1/2 -translate-x-1/3 top-full hidden group-hover:block bg-white shadow-lg p-6 min-w-max z-10 w-[1200px] rounded-md border-t-4 border-blue-900">
+                <div className="grid grid-cols-3 gap-4">
+                  {Object.entries(ABOUT_US_MENU).map(([title, items]) => (
+                    <div key={title}>
+                      <h5 className="font-bold mb-2 uppercase text-blue-900 text-base">
+                        {title}
+                      </h5>
+                      <ul>
+                        {items.map((item) => (
+                          <MenuItem key={item} text={item} />
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </li>
+
+            <li className="relative group rounded-md">
+              <span className="flex items-center px-3 py-1 cursor-pointer text-blue-900 group-hover:bg-blue-900 group-hover:text-white transition-colors duration-200">
+                Academics <FaChevronDown className="ml-1 text-sm" />
+              </span>
+              <div className="absolute left-1/2 -translate-x-1/3 top-full hidden group-hover:block bg-white shadow-lg p-6 min-w-max z-10 w-[1200px] rounded-md border-t-4 border-blue-900">
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <h5 className="font-bold mb-2 uppercase text-blue-900 text-base">
+                      {Object.keys(ACADEMICS_MENU)[0]}
+                    </h5>
+                    <ul>
+                      {ACADEMICS_MENU["ACADEMICS @ KISHANGARH GIRLS COLLEGE"].map((item) => (
+                        <MenuItem key={item} text={item} />
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 className="font-bold mb-2 uppercase text-blue-900 text-base">
+                      DISCIPLINES
+                    </h5>
+                    <ul>
+                      {ACADEMICS_MENU.DISCIPLINES_COL1.map((item) => (
+                        <MenuItem key={item} text={item} />
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <ul className="mt-6">
+                      {ACADEMICS_MENU.DISCIPLINES_COL2.map((item) => (
+                        <MenuItem key={item} text={item} />
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li className="relative group rounded-md">
+              <span className="px-3 py-1 cursor-pointer text-blue-900 group-hover:bg-blue-900 group-hover:text-white transition-colors duration-200">
+                Facilities
+              </span>
+            </li>
+
+            <li className="relative group rounded-md">
+              <span className="px-3 py-1 cursor-pointer text-blue-900 group-hover:bg-blue-900 group-hover:text-white transition-colors duration-200">
+                Scholarships
+              </span>
+            </li>
+
+            <li className="relative group rounded-md">
+              <span className="flex items-center px-3 py-1 cursor-pointer text-blue-900 group-hover:bg-blue-900 group-hover:text-white transition-colors duration-200">
+                Campus Life <FaChevronDown className="ml-1 text-sm" />
+              </span>
+              <ul className="absolute left-0 top-full hidden group-hover:block bg-white shadow-lg py-2 px-4 min-w-max z-10 rounded-md border-t-4 border-blue-900">
+                {CAMPUS_LIFE_MENU.map((txt) => (
+                  <li key={txt}>
+                    <span className="block px-4 py-2 hover:bg-blue-900 hover:text-white cursor-pointer text-black text-base font-semibold">
+                      {txt}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </li>
+
+            <li className="relative group rounded-md">
+              <span className="flex items-center px-3 py-1 cursor-pointer text-blue-900 group-hover:bg-blue-900 group-hover:text-white transition-colors duration-200">
+                Admissions 
+                {/* <FaChevronDown className="ml-1 text-sm" /> */}
+
+
+              </span>
+            </li>
+          </ul>
+        </nav>
+
+        <div className="flex items-center space-x-2 sm:space-x-4">
+          <div className="relative">
+            <button
+              onClick={handleSearchToggle}
+              className="flex items-center space-x-2 bg-blue-900 text-white px-4 py-2 rounded-full hover:bg-blue-800 transition-all duration-300 hover:scale-105 shadow-md"
+            >
+              <FaSearch className="text-lg" />
+              <span className="hidden sm:inline text-sm font-medium">Search</span>
+            </button>
+            {searchOpen && (
+              <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+                <div className="p-4">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="Search students, courses, or programs..."
+                      value={searchQuery}
+                      onChange={handleSearchInputChange}
+                      className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-blue-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      autoFocus
+                    />
+                    {isSearching && (
+                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-900"></div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {searchResults.students && searchResults.students.length > 0 && (
+                    <div className="mt-4">
+                      <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center">
+                        <FaUser className="mr-2 text-blue-600" />
+                        Students ({searchResults.students.length})
+                      </h4>
+                      <div className="space-y-2 max-h-32 overflow-y-auto">
+                        {searchResults.students.slice(0, 3).map((student) => (
+                          <div key={student._id} className="p-3 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg hover:from-blue-100 hover:to-blue-200 cursor-pointer transition-all duration-200 border border-blue-200">
+                            <div className="flex items-center space-x-3">
+                              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                                <FaUser className="text-white text-xs" />
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm font-medium text-blue-900">{student.name}</div>
+                                <div className="text-xs text-gray-600">{student.email}</div>
+                                {student.department && (
+                                  <div className="text-xs text-blue-600 font-medium">{student.department}</div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {searchResults.courses && searchResults.courses.length > 0 && (
+                    <div className="mt-4">
+                      <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center">
+                        <FaBookOpen className="mr-2 text-green-600" />
+                        Courses ({searchResults.courses.length})
+                      </h4>
+                      <div className="space-y-2 max-h-32 overflow-y-auto">
+                        {searchResults.courses.slice(0, 3).map((course) => (
+                          <div key={course._id} className="p-3 bg-gradient-to-r from-green-50 to-green-100 rounded-lg hover:from-green-100 hover:to-green-200 cursor-pointer transition-all duration-200 border border-green-200">
+                            <div className="flex items-center space-x-3">
+                              <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                <FaBookOpen className="text-white text-xs" />
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm font-medium text-green-900">{course.courseName}</div>
+                                <div className="text-xs text-gray-600">{course.department}</div>
+                                {course.duration && (
+                                  <div className="text-xs text-green-600 font-medium">{course.duration} months</div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {searchQuery && !isSearching && searchResults.students?.length === 0 && searchResults.courses?.length === 0 && (
+                    <div className="mt-4 text-center text-gray-500 text-sm">
+                      No results found for "{searchQuery}"
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="hidden sm:flex items-center space-x-3">
+            <button
+              onClick={() => window.location.href = '/student/login'}
+              className="bg-gradient-to-r from-green-600 to-green-700 text-white px-4 py-2 rounded-full hover:from-green-700 hover:to-green-800 transition-all duration-300 font-bold text-sm shadow-lg hover:shadow-xl hover:scale-105 flex items-center space-x-2"
+            >
+              <FaUser className="text-sm" />
+              <span>Student Login</span>
+            </button>
+            <button className="bg-gradient-to-r from-blue-900 to-blue-800 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-yellow-600 hover:text-blue-900 transition-all duration-300 cursor-pointer font-bold text-sm shadow-lg hover:shadow-xl hover:scale-105 flex items-center space-x-2">
+              <span>Apply Now</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="15"
+                height="15"
+                viewBox="0 0 15 15"
+                fill="none"
+                className="transition-transform duration-300 group-hover:translate-x-1"
+              >
+                <g clipPath="url(#clip0_201_978435345)">
+                  <path
+                    d="M1.42236 6.99728H13.089M13.089 6.99728L7.48903 1.39728M13.089 6.99728L7.48903 12.5973"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </g>
+                <defs>
+                  <clipPath id="clip0_201_978435345">
+                    <rect width="14" height="14" fill="white" transform="translate(0.00927734)" />
+                  </clipPath>
+                </defs>
+              </svg>
+            </button>
+          </div>
+          <button
+            onClick={() => setMenuOpen(true)}
+            className="md:hidden bg-blue-900 text-white p-2 rounded-full hover:bg-blue-800 transition-all duration-300 hover:scale-105 shadow-md"
+          >
+            <FaBars className="text-xl" />
+          </button>
+        </div>
+      </div>
+
+      {notificationVisible && (
+        <div className="bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-400 py-3 px-2 sm:px-4 text-gray-800 relative text-xs sm:text-sm overflow-hidden shadow-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <div className="bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold animate-pulse">
+                🔥 HOT
+              </div>
+              <div className="inline-block animate-marquee-once font-bold">
+                B.A. & B.Sc. Admissions-2025 Open | Scholarship up to 90% | Contact: 9414791273, 9414791147, 9649107150
+              </div>
+            </div>
+            <button
+              onClick={() => setNotificationVisible(false)}
+              className="bg-white/20 hover:bg-white/30 p-1 rounded-full transition-colors duration-300"
+            >
+              <FaTimes className="text-gray-700" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {menuOpen && (
+        <div className="fixed top-0 right-0 w-full sm:w-3/4 h-full bg-gradient-to-br from-white to-blue-50 shadow-2xl z-50 p-4 overflow-y-auto md:hidden">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-blue-900">Menu</h2>
+            <button
+              onClick={handleMenuClose}
+              className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors duration-300 hover:scale-105"
+            >
+              <FaTimes className="text-lg" />
+            </button>
+          </div>
+          
+          <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-green-50 rounded-xl border border-blue-200">
+            <div className="grid grid-cols-1 gap-3">
+              <button
+                onClick={() => window.location.href = '/student/login'}
+                className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white px-4 py-3 rounded-full hover:from-green-700 hover:to-green-800 transition-all duration-300 font-bold flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl"
+              >
+                <FaUser />
+                <span>Student Login</span>
+              </button>
+              <button className="w-full bg-gradient-to-r from-blue-900 to-blue-800 text-white px-4 py-3 rounded-full hover:from-yellow-500 hover:to-yellow-600 hover:text-blue-900 transition-all duration-300 cursor-pointer font-bold flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl">
+                <span>Apply Now</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="15"
+                  height="15"
+                  viewBox="0 0 15 15"
+                  fill="none"
+                >
+                  <g clipPath="url(#clip0_201_978435345)">
+                    <path
+                      d="M1.42236 6.99728H13.089M13.089 6.99728L7.48903 1.39728M13.089 6.99728L7.48903 12.5973"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_201_978435345">
+                      <rect width="14" height="14" fill="white" transform="translate(0.00927734)" />
+                    </clipPath>
+                  </defs>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <ul className="flex flex-col space-y-2 text-blue-900 font-semibold">
+            {renderMobileAdmissionsMenu()}
+
+            <MobileAccordion
+              title="About Us"
+              isOpen={accordionStates.aboutUs}
+              onToggle={() => toggleAccordion('aboutUs')}
+            >
+              <MobileAccordion
+                title="About Us @ Kishangarh Girls College"
+                isOpen={accordionStates.aboutSgv}
+                onToggle={() => toggleAccordion('aboutSgv')}
+              >
+                {ABOUT_US_MENU["ABOUT US @ KISHANGARH GIRLS COLLEGE"].map((txt) => (
+                  <li key={txt}>
+                    <span className="block px-2 py-1 hover:bg-blue-900 hover:text-white cursor-pointer">
+                      {txt}
+                    </span>
+                  </li>
+                ))}
+              </MobileAccordion>
+              <MobileAccordion
+                title="Leadership & Governance"
+                isOpen={accordionStates.leadership}
+                onToggle={() => toggleAccordion('leadership')}
+              >
+                {ABOUT_US_MENU["LEADERSHIP & GOVERNANCE"].map((txt) => (
+                  <li key={txt}>
+                    <span className="block px-2 py-1 hover:bg-blue-900 hover:text-white cursor-pointer">
+                      {txt}
+                    </span>
+                  </li>
+                ))}
+              </MobileAccordion>
+            </MobileAccordion>
+
+            <MobileAccordion
+              title="Academics"
+              isOpen={accordionStates.academics}
+              onToggle={() => toggleAccordion('academics')}
+            >
+              <MobileAccordion
+                title="Academics @ Kishangarh Girls College"
+                isOpen={accordionStates.academicsSgv}
+                onToggle={() => toggleAccordion('academicsSgv')}
+              >
+                {ACADEMICS_MENU["ACADEMICS @ KISHANGARH GIRLS COLLEGE"].map((txt) => (
+                  <li key={txt}>
+                    <span className="block px-2 py-1 hover:bg-blue-900 hover:text-white cursor-pointer">
+                      {txt}
+                    </span>
+                  </li>
+                ))}
+              </MobileAccordion>
+              <MobileAccordion
+                title="Disciplines"
+                isOpen={accordionStates.disciplines}
+                onToggle={() => toggleAccordion('disciplines')}
+              >
+                {[...ACADEMICS_MENU.DISCIPLINES_COL1, ...ACADEMICS_MENU.DISCIPLINES_COL2].map((txt) => (
+                  <li key={txt}>
+                    <span className="block px-2 py-1 hover:bg-blue-900 hover:text-white cursor-pointer">
+                      {txt}
+                    </span>
+                  </li>
+                ))}
+              </MobileAccordion>
+            </MobileAccordion>
+
+            <li>
+              <span className="block px-3 py-2 hover:bg-blue-900 hover:text-white cursor-pointer">
+                Facilities
+              </span>
+            </li>
+            <li>
+              <span className="block px-3 py-2 hover:bg-blue-900 hover:text-white cursor-pointer">
+                Scholarships
+              </span>
+            </li>
+
+            <MobileAccordion
+              title="Campus Life"
+              isOpen={accordionStates.campusLife}
+              onToggle={() => toggleAccordion('campusLife')}
+            >
+              <MobileAccordion
+                title="Campus Life @ Kishangarh Girls College"
+                isOpen={accordionStates.campusSgv}
+                onToggle={() => toggleAccordion('campusSgv')}
+              >
+                {CAMPUS_LIFE_MENU.map((txt) => (
+                  <li key={txt}>
+                    <span className="block px-2 py-1 hover:bg-blue-900 hover:text-white cursor-pointer">
+                      {txt}
+                    </span>
+                  </li>
+                ))}
+              </MobileAccordion>
+            </MobileAccordion>
+          </ul>
+        </div>
+      )}
+
+      {searchOpen && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="w-full max-w-2xl relative">
+            <div className="bg-white rounded-2xl shadow-2xl p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold text-blue-900">Search</h3>
+                <button
+                  onClick={handleSearchToggle}
+                  className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors duration-300 hover:scale-105"
+                >
+                  <FaTimes className="text-lg" />
+                </button>
+              </div>
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search students, courses, or programs..."
+                  value={searchQuery}
+                  onChange={handleSearchInputChange}
+                  className="w-full p-4 border-2 border-gray-300 rounded-xl text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
+                  autoFocus
+                />
+                {isSearching && (
+                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-900"></div>
+                  </div>
+                )}
+              </div>
+              
+              {searchResults.students && searchResults.students.length > 0 && (
+                <div className="mt-6">
+                  <h4 className="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+                    <FaUser className="mr-2 text-blue-600" />
+                    Students ({searchResults.students.length})
+                  </h4>
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    {searchResults.students.slice(0, 5).map((student) => (
+                      <div key={student._id} className="p-3 bg-blue-50 rounded-lg hover:bg-blue-100 cursor-pointer transition-colors">
+                        <div className="text-sm font-medium text-blue-900">{student.name}</div>
+                        <div className="text-xs text-gray-600">{student.email}</div>
+                        {student.phone && <div className="text-xs text-gray-500">{student.phone}</div>}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {searchResults.courses && searchResults.courses.length > 0 && (
+                <div className="mt-6">
+                  <h4 className="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+                    <FaBookOpen className="mr-2 text-green-600" />
+                    Courses ({searchResults.courses.length})
+                  </h4>
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    {searchResults.courses.slice(0, 5).map((course) => (
+                      <div key={course._id} className="p-3 bg-green-50 rounded-lg hover:bg-green-100 cursor-pointer transition-colors">
+                        <div className="text-sm font-medium text-green-900">{course.courseName}</div>
+                        <div className="text-xs text-gray-600">{course.department}</div>
+                        {course.duration && <div className="text-xs text-gray-500">Duration: {course.duration} months</div>}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {searchQuery && !isSearching && searchResults.students?.length === 0 && searchResults.courses?.length === 0 && (
+                <div className="mt-6 text-center text-gray-500">
+                  <div className="text-4xl mb-2">🔍</div>
+                  <div>No results found for "{searchQuery}"</div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+};
+
+export default Navbar;
