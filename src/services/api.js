@@ -1,5 +1,5 @@
 // Comprehensive API service for University frontend
-const API_BASE_URL = 'http://localhost:5001/api';
+const API_BASE_URL = '${backendUrl}/api';
 
 class ApiService {
   constructor() {

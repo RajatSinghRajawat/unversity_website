@@ -60,7 +60,7 @@ const StudentProfile = () => {
       }
 
       // Try the direct email/password search endpoint first
-      const response = await fetch(`http://localhost:5001/api/students/search?${queryParams}`);
+      const response = await fetch(`${backendUrl}/api/students/search?${queryParams}`);
       const result = await response.json();
 
       if (result.success && result.data) {
@@ -178,7 +178,7 @@ const StudentProfile = () => {
                 <div className="relative">
                   {studentData.image ? (
                     <img 
-                      src={`http://localhost:5001/public/Uploads/${studentData.image}`} 
+                      src={`${backendUrl}/public/Uploads/${studentData.image}`} 
                       alt={studentData.name}
                       className="w-24 h-24 rounded-full object-cover border-4 border-blue-500 shadow-lg"
                       onError={(e) => {

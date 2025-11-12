@@ -1,5 +1,5 @@
 // Simple Message Service for University Frontend
-const API_BASE_URL = 'http://localhost:5001/api';
+const API_BASE_URL = '${backendUrl}/api';
 
 class MessageService {
   // Get messages for a student

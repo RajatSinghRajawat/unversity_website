@@ -35,7 +35,7 @@ const StudentLogin = () => {
       };
       
       const response = await fetch(
-        `http://localhost:5001/api/students/search-email-password/?email=${formData.email}&password=${formData.password}`, 
+        `${backendUrl}/api/students/search-email-password/?email=${formData.email}&password=${formData.password}`, 
         requestOptions
       );
       

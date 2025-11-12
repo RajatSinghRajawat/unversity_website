@@ -42,7 +42,7 @@ const StudentAdmitCard = () => {
 
       console.log('🔍 Fetching admit cards for student:', studentId);
       
-      const response = await fetch(`http://localhost:5001/api/admitcards/student/${studentId}`, {
+      const response = await fetch(`${backendUrl}/api/admitcards/student/${studentId}`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json'
