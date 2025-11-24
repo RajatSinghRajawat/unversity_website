@@ -199,8 +199,8 @@ const Navbar = () => {
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          <span className="text-white hover:text-yellow-300 transition-colors cursor-pointer text-xs sm:text-sm flex items-center">
-            <FaEnvelope className="inline mr-1 text-yellow-300" /> admissions@kishangarhgirlscollege.com
+            <span className="text-white hover:text-yellow-300 transition-colors cursor-pointer text-xs sm:text-sm flex items-center">
+            <FaEnvelope className="inline mr-1 text-yellow-300" /> admissions@kishangarhgirlsandlawcollege.com
           </span>
         </div>
         <nav className="hidden md:flex">
@@ -225,10 +225,10 @@ const Navbar = () => {
             />
             <div className="hidden sm:block">
               <div className="text-blue-900 font-bold text-sm sm:text-base">
-              
+                Kishangarh Girls & Law College
               </div>
-              <div className="text-blue-900 font-bold text-sm sm:text-base">
-               
+              <div className="text-blue-700 text-xs sm:text-sm">
+                Devta Road, Bambora (Kishangarh) Alwar
               </div>
             </div>
           </div>
@@ -300,7 +300,7 @@ const Navbar = () => {
                       {Object.keys(ACADEMICS_MENU)[0]}
                     </h5>
                     <ul>
-                      {ACADEMICS_MENU["ACADEMICS @ KISHANGARH GIRLS COLLEGE"].map((item) => (
+                      {ACADEMICS_MENU["ACADEMICS @ KISHANGARH GIRLS & LAW COLLEGE"].map((item) => (
                         <MenuItem key={item} text={item} />
                       ))}
                     </ul>
@@ -575,7 +575,7 @@ const Navbar = () => {
               onToggle={() => toggleAccordion('aboutUs')}
             >
               <MobileAccordion
-                title="About Us @ Kishangarh Girls College"
+                title="About Us @ Kishangarh Girls & Law College"
                 isOpen={accordionStates.aboutSgv}
                 onToggle={() => toggleAccordion('aboutSgv')}
               >
@@ -608,7 +608,7 @@ const Navbar = () => {
               onToggle={() => toggleAccordion('academics')}
             >
               <MobileAccordion
-                title="Academics @ Kishangarh Girls College"
+                title="Academics @ Kishangarh Girls & Law College"
                 isOpen={accordionStates.academicsSgv}
                 onToggle={() => toggleAccordion('academicsSgv')}
               >
@@ -652,7 +652,7 @@ const Navbar = () => {
               onToggle={() => toggleAccordion('campusLife')}
             >
               <MobileAccordion
-                title="Campus Life @ Kishangarh Girls College"
+                title="Campus Life @ Kishangarh Girls & Law College"
                 isOpen={accordionStates.campusSgv}
                 onToggle={() => toggleAccordion('campusSgv')}
               >

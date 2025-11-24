@@ -27,6 +27,9 @@ const Card = ({
           src={image}
           alt={title}
           className={`card-image ${big ? 'h-80' : imageHeight}`}
+          onError={(e) => {
+            e.target.src = "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&h=400&fit=crop";
+          }}
         />
         {showArrow && (
           <button

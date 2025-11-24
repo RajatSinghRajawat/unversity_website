@@ -53,8 +53,8 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 pb-8 flex flex-col md:flex-row justify-between items-center">
         <div className="flex items-center space-x-4 mb-4 md:mb-0">
           <img
-            src="https://www.gyanvihar.org/assets/img/logo.png"
-            alt="Gyan Vihar University Logo"
+            src="/kishangarh-logo.svg"
+            alt="Kishangarh Girls & Law College Logo"
             className="h-12"
           />
           <div className="flex space-x-3">
@@ -86,7 +86,7 @@ const Footer = () => {
       </div>
 
       <div className="text-center text-xs text-gray-700 pb-6">
-        ©Copyright 2025, Gyan Vihar University. All Rights Reserved
+        ©Copyright 2025, Kishangarh Girls & Law College. All Rights Reserved
       </div>
     </footer>
   );

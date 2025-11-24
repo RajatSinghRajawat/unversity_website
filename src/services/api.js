@@ -1,5 +1,6 @@
 // Comprehensive API service for University frontend
-const API_BASE_URL = '${backendUrl}/api';
+const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+const API_BASE_URL = `${backendUrl}/api`;
 
 class ApiService {
   constructor() {
