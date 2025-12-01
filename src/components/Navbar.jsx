@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { FaChevronDown, FaSearch, FaBars, FaTimes, FaEnvelope, FaBell, FaUser, FaGraduationCap, FaBookOpen, FaHome, FaInfoCircle, FaUniversity, FaUsers, FaChartLine } from 'react-icons/fa';
+import { FaChevronDown, FaBars, FaTimes, FaEnvelope, FaBell, FaUser, FaGraduationCap, FaBookOpen, FaHome, FaInfoCircle, FaUniversity, FaUsers, FaChartLine } from 'react-icons/fa';
 import { useAccordion } from '../hooks/useAccordion';
 import MobileAccordion from './navbar/MobileAccordion';
 import MenuItem from './navbar/MenuItem';
@@ -15,11 +15,7 @@ import {
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
   const [notificationVisible, setNotificationVisible] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [isSearching, setIsSearching] = useState(false);
   const [stats, setStats] = useState({
     totalStudents: 0,
     totalCourses: 0,
@@ -41,14 +37,6 @@ const Navbar = () => {
     setMenuOpen(false);
     closeAllAccordions();
   }, [closeAllAccordions]);
-
-  const handleSearchToggle = useCallback(() => {
-    setSearchOpen((prev) => !prev);
-    if (!searchOpen) {
-      setSearchQuery('');
-      setSearchResults([]);
-    }
-  }, [searchOpen]);
 
   // Load stats on component mount
   useEffect(() => {
@@ -84,42 +72,6 @@ const Navbar = () => {
     loadStats();
   }, []);
 
-  const handleSearch = useCallback(async (query) => {
-    if (!query.trim()) {
-      setSearchResults([]);
-      return;
-    }
-    
-    setIsSearching(true);
-    try {
-      const [studentsResults, coursesResults] = await Promise.all([
-        ApiService.searchStudents(query),
-        ApiService.searchCourses(query)
-      ]);
-      
-      setSearchResults({
-        students: studentsResults.data || [],
-        courses: coursesResults.data || []
-      });
-    } catch (error) {
-      console.error('Search error:', error);
-      setSearchResults([]);
-    } finally {
-      setIsSearching(false);
-    }
-  }, []);
-
-  const handleSearchInputChange = useCallback((e) => {
-    const query = e.target.value;
-    setSearchQuery(query);
-    
-    // Debounce search
-    const timeoutId = setTimeout(() => {
-      handleSearch(query);
-    }, 300);
-    
-    return () => clearTimeout(timeoutId);
-  }, [handleSearch]);
 
   const renderAdmissionsDropdown = () => {
     const col1 = ADMISSIONS_SCHOOLS.slice(0, 5);
@@ -191,16 +143,16 @@ const Navbar = () => {
       <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 text-white py-3 px-2 sm:px-4 flex flex-col sm:flex-row flex-wrap justify-between items-center text-xs sm:text-sm gap-2 shadow-lg">
         <div className="flex items-center space-x-4">
           <span className="bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1.5 rounded-full font-bold cursor-pointer text-xs sm:text-sm shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
-            📞 Contact: 9414791273
+            📞 Contact: 9649107150
           </span>
           <div className="hidden sm:flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-3 py-1">
             <FaUser className="text-yellow-300" />
             <span className="text-yellow-300 font-semibold">{stats.totalStudents}+ Students</span>
           </div>
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 flex-wrap">
             <span className="text-white hover:text-yellow-300 transition-colors cursor-pointer text-xs sm:text-sm flex items-center">
-            <FaEnvelope className="inline mr-1 text-yellow-300" /> admissions@kishangarhgirlsandlawcollege.com
+            <FaEnvelope className="inline mr-1 text-yellow-300" /> kishangarhgirls@gmail.com, kishangarhlawcollege@gmail.com
           </span>
         </div>
         <nav className="hidden md:flex">
@@ -220,12 +172,12 @@ const Navbar = () => {
             <img
               loading="lazy"
               src="/kishangarh-logo.svg"
-              alt="Kishangarh Girls College Logo"
+              alt="Kishangarh law college (CO-EDU) Logo"
               className="h-10 sm:h-12 cursor-pointer hover:scale-105 transition-transform duration-300"
             />
             <div className="hidden sm:block">
               <div className="text-blue-900 font-bold text-sm sm:text-base">
-                Kishangarh Girls & Law College
+                Kishangarh law college (CO-EDU)
               </div>
               <div className="text-blue-700 text-xs sm:text-sm">
                 Devta Road, Bambora (Kishangarh) Alwar
@@ -300,7 +252,7 @@ const Navbar = () => {
                       {Object.keys(ACADEMICS_MENU)[0]}
                     </h5>
                     <ul>
-                      {ACADEMICS_MENU["ACADEMICS @ KISHANGARH GIRLS & LAW COLLEGE"].map((item) => (
+                      {ACADEMICS_MENU["ACADEMICS @ KISHANGARH LAW COLLEGE (CO-EDU)"].map((item) => (
                         <MenuItem key={item} text={item} />
                       ))}
                     </ul>
@@ -365,96 +317,6 @@ const Navbar = () => {
         </nav>
 
         <div className="flex items-center space-x-2 sm:space-x-4">
-          <div className="relative">
-            <button
-              onClick={handleSearchToggle}
-              className="flex items-center space-x-2 bg-blue-900 text-white px-4 py-2 rounded-full hover:bg-blue-800 transition-all duration-300 hover:scale-105 shadow-md"
-            >
-              <FaSearch className="text-lg" />
-              <span className="hidden sm:inline text-sm font-medium">Search</span>
-            </button>
-            {searchOpen && (
-              <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
-                <div className="p-4">
-                  <div className="relative">
-                    <input
-                      type="text"
-                      placeholder="Search students, courses, or programs..."
-                      value={searchQuery}
-                      onChange={handleSearchInputChange}
-                      className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-blue-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      autoFocus
-                    />
-                    {isSearching && (
-                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-900"></div>
-                      </div>
-                    )}
-                  </div>
-                  
-                  {searchResults.students && searchResults.students.length > 0 && (
-                    <div className="mt-4">
-                      <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center">
-                        <FaUser className="mr-2 text-blue-600" />
-                        Students ({searchResults.students.length})
-                      </h4>
-                      <div className="space-y-2 max-h-32 overflow-y-auto">
-                        {searchResults.students.slice(0, 3).map((student) => (
-                          <div key={student._id} className="p-3 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg hover:from-blue-100 hover:to-blue-200 cursor-pointer transition-all duration-200 border border-blue-200">
-                            <div className="flex items-center space-x-3">
-                              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                                <FaUser className="text-white text-xs" />
-                              </div>
-                              <div className="flex-1">
-                                <div className="text-sm font-medium text-blue-900">{student.name}</div>
-                                <div className="text-xs text-gray-600">{student.email}</div>
-                                {student.department && (
-                                  <div className="text-xs text-blue-600 font-medium">{student.department}</div>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  
-                  {searchResults.courses && searchResults.courses.length > 0 && (
-                    <div className="mt-4">
-                      <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center">
-                        <FaBookOpen className="mr-2 text-green-600" />
-                        Courses ({searchResults.courses.length})
-                      </h4>
-                      <div className="space-y-2 max-h-32 overflow-y-auto">
-                        {searchResults.courses.slice(0, 3).map((course) => (
-                          <div key={course._id} className="p-3 bg-gradient-to-r from-green-50 to-green-100 rounded-lg hover:from-green-100 hover:to-green-200 cursor-pointer transition-all duration-200 border border-green-200">
-                            <div className="flex items-center space-x-3">
-                              <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                                <FaBookOpen className="text-white text-xs" />
-                              </div>
-                              <div className="flex-1">
-                                <div className="text-sm font-medium text-green-900">{course.courseName}</div>
-                                <div className="text-xs text-gray-600">{course.department}</div>
-                                {course.duration && (
-                                  <div className="text-xs text-green-600 font-medium">{course.duration} months</div>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  
-                  {searchQuery && !isSearching && searchResults.students?.length === 0 && searchResults.courses?.length === 0 && (
-                    <div className="mt-4 text-center text-gray-500 text-sm">
-                      No results found for "{searchQuery}"
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
           <div className="hidden sm:flex items-center space-x-3">
             <button
               onClick={() => window.location.href = '/student/login'}
@@ -506,7 +368,7 @@ const Navbar = () => {
                 🔥 HOT
               </div>
               <div className="inline-block animate-marquee-once font-bold">
-                B.A. & B.Sc. Admissions-2025 Open | Scholarship up to 90% | Contact: 9414791273, 9414791147, 9649107150
+                LLB, LLM & B.A LLB Admissions-2025 Open | Contact: 9649107150
               </div>
             </div>
             <button
@@ -575,11 +437,11 @@ const Navbar = () => {
               onToggle={() => toggleAccordion('aboutUs')}
             >
               <MobileAccordion
-                title="About Us @ Kishangarh Girls & Law College"
+                title="About Us @ Kishangarh law college (CO-EDU)"
                 isOpen={accordionStates.aboutSgv}
                 onToggle={() => toggleAccordion('aboutSgv')}
               >
-                {ABOUT_US_MENU["ABOUT US @ KISHANGARH GIRLS COLLEGE"].map((txt) => (
+                {ABOUT_US_MENU["ABOUT US @ KISHANGARH LAW COLLEGE (CO-EDU)"].map((txt) => (
                   <li key={txt}>
                     <span className="block px-2 py-1 hover:bg-blue-900 hover:text-white cursor-pointer">
                       {txt}
@@ -608,11 +470,11 @@ const Navbar = () => {
               onToggle={() => toggleAccordion('academics')}
             >
               <MobileAccordion
-                title="Academics @ Kishangarh Girls & Law College"
+                title="Academics @ Kishangarh law college (CO-EDU)"
                 isOpen={accordionStates.academicsSgv}
                 onToggle={() => toggleAccordion('academicsSgv')}
               >
-                {ACADEMICS_MENU["ACADEMICS @ KISHANGARH GIRLS COLLEGE"].map((txt) => (
+                {ACADEMICS_MENU["ACADEMICS @ KISHANGARH LAW COLLEGE (CO-EDU)"].map((txt) => (
                   <li key={txt}>
                     <span className="block px-2 py-1 hover:bg-blue-900 hover:text-white cursor-pointer">
                       {txt}
@@ -652,7 +514,7 @@ const Navbar = () => {
               onToggle={() => toggleAccordion('campusLife')}
             >
               <MobileAccordion
-                title="Campus Life @ Kishangarh Girls & Law College"
+                title="Campus Life @ Kishangarh law college (CO-EDU)"
                 isOpen={accordionStates.campusSgv}
                 onToggle={() => toggleAccordion('campusSgv')}
               >
@@ -669,81 +531,6 @@ const Navbar = () => {
         </div>
       )}
 
-      {searchOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="w-full max-w-2xl relative">
-            <div className="bg-white rounded-2xl shadow-2xl p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold text-blue-900">Search</h3>
-                <button
-                  onClick={handleSearchToggle}
-                  className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors duration-300 hover:scale-105"
-                >
-                  <FaTimes className="text-lg" />
-                </button>
-              </div>
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search students, courses, or programs..."
-                  value={searchQuery}
-                  onChange={handleSearchInputChange}
-                  className="w-full p-4 border-2 border-gray-300 rounded-xl text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
-                  autoFocus
-                />
-                {isSearching && (
-                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-900"></div>
-                  </div>
-                )}
-              </div>
-              
-              {searchResults.students && searchResults.students.length > 0 && (
-                <div className="mt-6">
-                  <h4 className="text-lg font-semibold text-gray-700 mb-3 flex items-center">
-                    <FaUser className="mr-2 text-blue-600" />
-                    Students ({searchResults.students.length})
-                  </h4>
-                  <div className="space-y-2 max-h-48 overflow-y-auto">
-                    {searchResults.students.slice(0, 5).map((student) => (
-                      <div key={student._id} className="p-3 bg-blue-50 rounded-lg hover:bg-blue-100 cursor-pointer transition-colors">
-                        <div className="text-sm font-medium text-blue-900">{student.name}</div>
-                        <div className="text-xs text-gray-600">{student.email}</div>
-                        {student.phone && <div className="text-xs text-gray-500">{student.phone}</div>}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-              
-              {searchResults.courses && searchResults.courses.length > 0 && (
-                <div className="mt-6">
-                  <h4 className="text-lg font-semibold text-gray-700 mb-3 flex items-center">
-                    <FaBookOpen className="mr-2 text-green-600" />
-                    Courses ({searchResults.courses.length})
-                  </h4>
-                  <div className="space-y-2 max-h-48 overflow-y-auto">
-                    {searchResults.courses.slice(0, 5).map((course) => (
-                      <div key={course._id} className="p-3 bg-green-50 rounded-lg hover:bg-green-100 cursor-pointer transition-colors">
-                        <div className="text-sm font-medium text-green-900">{course.courseName}</div>
-                        <div className="text-xs text-gray-600">{course.department}</div>
-                        {course.duration && <div className="text-xs text-gray-500">Duration: {course.duration} months</div>}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-              
-              {searchQuery && !isSearching && searchResults.students?.length === 0 && searchResults.courses?.length === 0 && (
-                <div className="mt-6 text-center text-gray-500">
-                  <div className="text-4xl mb-2">🔍</div>
-                  <div>No results found for "{searchQuery}"</div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </header>
   );
 };

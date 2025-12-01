@@ -198,7 +198,7 @@ const Home = () => {
       title: "Help & Support", 
       action: () => {
         // Open help modal or redirect to help page
-        const helpMessage = "Welcome to Kishangarh Girls & Law College Help Center!\n\nFor immediate assistance:\n• Call: +91-9414791273\n• Email: help@kishangarhgirlsandlawcollege.com\n• WhatsApp: +91-9414791273";
+        const helpMessage = "Welcome to Kishangarh law college (CO-EDU) Help Center!\n\nFor immediate assistance:\n• Call: +91-9649107150\n• Email: kishangarhgirls@gmail.com, kishangarhlawcollege@gmail.com\n• WhatsApp: +91-9649107150";
         alert(helpMessage);
       },
       color: 'bg-green-600 hover:bg-green-700'
@@ -207,8 +207,8 @@ const Home = () => {
       icon: FaWhatsapp, 
       title: "WhatsApp", 
       action: () => {
-        const message = encodeURIComponent("Hello! I'm interested in Kishangarh Girls & Law College. Can you provide more information?");
-        window.open(`https://wa.me/919414791273?text=${message}`, '_blank');
+        const message = encodeURIComponent("Hello! I'm interested in Kishangarh law college (CO-EDU). Can you provide more information?");
+        window.open(`https://wa.me/919649107150?text=${message}`, '_blank');
       },
       color: 'bg-green-500 hover:bg-green-600'
     },
@@ -217,8 +217,8 @@ const Home = () => {
       title: "Call Now", 
       action: () => {
         // Show confirmation before calling
-        if (confirm("Do you want to call Kishangarh Girls & Law College?\n\nPhone: +91-9414791273")) {
-          window.open('tel:+919414791273');
+        if (confirm("Do you want to call Kishangarh law college (CO-EDU)?\n\nPhone: +91-9649107150")) {
+          window.open('tel:+919649107150');
         }
       },
       color: 'bg-red-600 hover:bg-red-700'
@@ -404,7 +404,7 @@ const Home = () => {
         break;
       case 'contactAdmission':
         // Contact admission office
-        const admissionMessage = "Admission Office Contact:\n\n• Phone: +91-9414791273\n• Email: admissions@kishangarhgirlsandlawcollege.com\n• Office Hours: 9 AM - 5 PM (Mon-Fri)";
+        const admissionMessage = "Admission Office Contact:\n\n• Phone: +91-9649107150\n• Email: kishangarhgirls@gmail.com, kishangarhlawcollege@gmail.com\n• Office Hours: 9 AM - 5 PM (Mon-Fri)";
         alert(admissionMessage);
         break;
       default:
@@ -430,22 +430,19 @@ const Home = () => {
           >
             <img
               src={img}
-              alt={`Kishangarh Girls & Law College ${index + 1}`}
+              alt={`Kishangarh law college (CO-EDU) ${index + 1}`}
               className="w-full h-full object-cover"
-              onError={(e) => {
-                e.target.src = "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&h=600&fit=crop";
-              }}
             />
             <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 via-blue-800/70 to-transparent flex items-center">
               <div className="max-w-7xl mx-auto px-4 w-full animate-fadeInUp">
                 <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-2xl">
-                  Kishangarh Girls & Law College
+                  Kishangarh law college (CO-EDU)
                 </h1>
                 <p className="text-xl md:text-2xl text-blue-100 mb-6 drop-shadow-lg">
                   Empowering Women Through Education
                 </p>
                 <p className="text-lg text-white/90 max-w-2xl drop-shadow">
-                  Recognized by Rajasthan Government and Raj Rishi Bhartrihari Matsya University, Alwar
+                  Recognized by Rajasthan Government and Dr Bhimrao Ambedkar law University Jaipur
                 </p>
                 <div className="mt-8 flex flex-wrap gap-4">
                   <button
@@ -511,7 +508,7 @@ const Home = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-blue-800/10"></div>
         <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="text-center mb-8 animate-fadeInUp">
-            <h2 className="text-3xl md:text-4xl font-bold mb-2 animate-pulse-slow">Kishangarh Girls & Law College</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-2 animate-pulse-slow">Kishangarh law college (CO-EDU)</h2>
             <p className="text-blue-200 text-lg">Empowering Women Through Education</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -557,8 +554,8 @@ const Home = () => {
 
       <section id="news" className="py-16 bg-gray-100">
         <SectionHeader
-          title="Kishangarh Girls & Law College Today"
-          subtitle="The latest news from Kishangarh Girls & Law College"
+          title="Kishangarh law college (CO-EDU) Today"
+          subtitle="The latest news from Kishangarh law college (CO-EDU)"
         />
         <div className="news-grid max-w-7xl mx-auto px-4">
           {NEWS_CARDS.slice(0, itemsToShow.news).map((card) => (
@@ -576,9 +573,6 @@ const Home = () => {
                   src={card.image}
                   alt={card.title}
                   className={`card-image ${card.big ? "h-80" : "h-64"} group-hover:scale-110 transition-transform duration-500`}
-                  onError={(e) => {
-                    e.target.src = "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&h=400&fit=crop&auto=format";
-                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 
@@ -669,7 +663,7 @@ const Home = () => {
         </div>
         <div className="text-center mt-12">
           <ActionButton 
-            text={viewMoreStates.news ? "Show Less News" : "More Kishangarh Girls & Law College News"} 
+            text={viewMoreStates.news ? "Show Less News" : "More Kishangarh law college (CO-EDU) News"} 
             onClick={() => handleDynamicAction('readMoreNews')} 
           />
         </div>
@@ -694,9 +688,6 @@ const Home = () => {
                   src={card.image}
                   alt={card.title}
                   className="card-image h-64 group-hover:scale-110 transition-transform duration-500"
-                  onError={(e) => {
-                    e.target.src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=400&fit=crop&auto=format";
-                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 
@@ -732,7 +723,7 @@ const Home = () => {
       </section>
 
       <section id="why-choose-us" className="py-16 bg-gray-100">
-        <SectionHeader title="Why Kishangarh Girls & Law College?" />
+        <SectionHeader title="Why Kishangarh law college (CO-EDU)?" />
         <div className="max-w-7xl mx-auto relative overflow-hidden">
           <div
             className="why-slider"
@@ -769,9 +760,6 @@ const Home = () => {
                   src={event.img}
                   alt={event.title}
                   className="card-image h-48 group-hover:scale-110 transition-transform duration-500"
-                  onError={(e) => {
-                    e.target.src = "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=600&h=400&fit=crop&auto=format";
-                  }}
                 />
                 <div className="absolute top-2 left-2 bg-gray-800 text-white px-3 py-1 rounded-md text-sm font-bold">
                   {event.date}
@@ -810,7 +798,7 @@ const Home = () => {
 
       <section id="about" className="py-16 bg-white text-center">
         <SectionHeader
-          title="About Kishangarh Girls & Law College"
+          title="About Kishangarh law college (CO-EDU)"
           subtitle="Empowering women through quality education and holistic development in a supportive environment"
         />
         <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-8 border-t border-b py-10">
@@ -824,7 +812,7 @@ const Home = () => {
           ))}
         </div>
         <div className="mt-12">
-          <ActionButton text="More About Kishangarh Girls & Law College" onClick={() => handleDynamicAction('moreAboutCollege')} />
+          <ActionButton text="More About Kishangarh law college (CO-EDU)" onClick={() => handleDynamicAction('moreAboutCollege')} />
         </div>
       </section>
 
@@ -844,9 +832,6 @@ const Home = () => {
                   src={card.image}
                   alt={card.title}
                   className="card-image h-64 group-hover:scale-110 transition-transform duration-500"
-                  onError={(e) => {
-                    e.target.src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=400&fit=crop&auto=format";
-                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 
@@ -916,9 +901,6 @@ const Home = () => {
                   src={item.image}
                   alt={item.title}
                   className="card-image h-64 group-hover:scale-110 transition-transform duration-500"
-                  onError={(e) => {
-                    e.target.src = "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=600&h=400&fit=crop&auto=format";
-                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 
@@ -988,9 +970,6 @@ const Home = () => {
                       src={testimonial.image}
                       alt={testimonial.name}
                       className="w-full h-64 object-cover rounded-lg"
-                      onError={(e) => {
-                        e.target.src = "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=300&h=300&fit=crop&auto=format";
-                      }}
                     />
                   </div>
                   <div className="w-full md:w-2/3 md:pl-6 text-center md:text-left">
@@ -1026,9 +1005,6 @@ const Home = () => {
                   src={card.image}
                   alt={card.title}
                   className="card-image h-64 group-hover:scale-110 transition-transform duration-500"
-                  onError={(e) => {
-                    e.target.src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=400&fit=crop&auto=format";
-                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 

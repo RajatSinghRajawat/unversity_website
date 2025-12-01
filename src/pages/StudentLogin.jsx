@@ -191,7 +191,7 @@ const StudentLogin = () => {
 
         <div className="text-center text-xs sm:text-sm text-gray-600">
           <p>Need help? Contact:</p>
-          <p className="font-semibold text-blue-900">support@kishangarhgirlscollege.com</p>
+          <p className="font-semibold text-blue-900">kishangarhgirls@gmail.com, kishangarhlawcollege@gmail.com</p>
           <p className="font-semibold text-blue-900">Toll Free: 18003094545</p>
         </div>
       </div>

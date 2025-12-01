@@ -54,7 +54,7 @@ const Footer = () => {
         <div className="flex items-center space-x-4 mb-4 md:mb-0">
           <img
             src="/kishangarh-logo.svg"
-            alt="Kishangarh Girls & Law College Logo"
+            alt="Kishangarh law college (CO-EDU) Logo"
             className="h-12"
           />
           <div className="flex space-x-3">
@@ -86,7 +86,7 @@ const Footer = () => {
       </div>
 
       <div className="text-center text-xs text-gray-700 pb-6">
-        ©Copyright 2025, Kishangarh Girls & Law College. All Rights Reserved
+        ©Copyright 2025, Kishangarh law college (CO-EDU). All Rights Reserved
       </div>
     </footer>
   );
