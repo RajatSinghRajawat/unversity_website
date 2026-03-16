@@ -3,6 +3,7 @@ import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCalendarAlt, FaIdCard, F
 import StudentNavbar from '../components/StudentNavbar';
 
 const StudentProfile = () => {
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [studentData, setStudentData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

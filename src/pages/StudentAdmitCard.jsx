@@ -4,11 +4,14 @@ import StudentNavbar from '../components/StudentNavbar';
 import ApiService from '../services/api';
 
 const StudentAdmitCard = () => {
-  const [selectedCard, setSelectedCard] = useState(null);
+
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+    const [selectedCard, setSelectedCard] = useState(null);
   const [admitCards, setAdmitCards] = useState([]);
   const [studentData, setStudentData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
 
   // Get student data from localStorage
   const getStudentData = () => {

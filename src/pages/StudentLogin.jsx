@@ -22,6 +22,7 @@ const StudentLogin = () => {
     });
     setError('');
   };
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();

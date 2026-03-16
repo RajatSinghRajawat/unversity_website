@@ -18,6 +18,7 @@ import { SAMPLE_MESSAGES, DEMO_STUDENT } from '../constants/studentData';
 import messageService from '../services/messageService';
 
 const StudentMessage = () => {
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [messages, setMessages] = useState([]);
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [filterType, setFilterType] = useState('all');
