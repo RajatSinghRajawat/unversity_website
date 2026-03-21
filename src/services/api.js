@@ -1,19 +1,9 @@
-// Comprehensive API service for University frontend
-const sanitizeBaseUrl = (value) => {
-  if (!value) return '';
-  const normalized = String(value).trim();
-  if (!normalized || normalized === 'undefined' || normalized === 'null') return '';
-  return normalized.replace(/\/+$/, '');
-};
 
-const envBackendUrl = sanitizeBaseUrl(import.meta.env.REACT_APP_API_URL);
-
-export const backendUrl = envBackendUrl || 'https://kishangarhcollege.in';
-const API_BASE_URL = backendUrl;
+const API_BASE_URL = " "
 
 class ApiService {
   constructor() {
-    this.baseURL = API_BASE_URL;
+    this.baseURL = " ";
   }
 
   // Get headers for API requests

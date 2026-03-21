@@ -1,32 +1,24 @@
-# Stage 1: Build the Vite React app
+# Stage 1: Build
 FROM node:23-alpine AS build
 
-# Set working directory
 WORKDIR /app
 
-# Copy package files and install dependencies
+# ENV define (IMPORTANT 🔥)
+ARG REACT_APP_API_BASE_URL
+ENV REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
+
 COPY package*.json ./
 RUN npm install
 
-# Copy the rest of the source code
 COPY . .
-
-# Build the Vite app
 RUN npm run build
 
-# Stage 2: Serve the app using 'serve'
+# Stage 2
 FROM node:23-alpine
-
 WORKDIR /app
 
-# Install 'serve' globally
 RUN npm install -g serve
-
-# Copy build output from the previous stage
 COPY --from=build /app/dist ./dist
 
-# Expose port 3011
-EXPOSE 3011
-
-# Use 'serve' to serve the build on port 3011
+EXPOSE 3014
 CMD ["serve", "-s", "dist", "-l", "3014"]

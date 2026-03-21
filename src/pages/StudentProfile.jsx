@@ -1,16 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCalendarAlt, FaIdCard, FaGraduationCap, FaUserTie, FaExclamationTriangle, FaSpinner } from 'react-icons/fa';
 import StudentNavbar from '../components/StudentNavbar';
-import  { backendUrl } from '../services/api';
 
 const StudentProfile = () => {
-  const safeBackendUrl =
-    typeof backendUrl === 'string' && backendUrl.trim() && backendUrl !== 'undefined'
-      ? backendUrl
-      : 'https://kishangarhcollege.in';
-
-      console.log(safeBackendUrl,"safeBackendUrl");
-      
   const [studentData, setStudentData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -68,7 +60,7 @@ const StudentProfile = () => {
       }
 
       // Try the direct email/password search endpoint first
-      const response = await fetch(`${safeBackendUrl}/api/students/search?${queryParams}`);
+      const response = await fetch(`/api/students/search?${queryParams}`);
       const result = await response.json();
 
       if (result.success && result.data) {
@@ -186,7 +178,7 @@ const StudentProfile = () => {
                 <div className="relative">
                   {studentData.image ? (
                     <img 
-                      src={`${safeBackendUrl}/public/Uploads/${studentData.image}`} 
+                      src={`/public/Uploads/${studentData.image}`} 
                       alt={studentData.name}
                       className="w-24 h-24 rounded-full object-cover border-4 border-blue-500 shadow-lg"
                       onError={(e) => {
