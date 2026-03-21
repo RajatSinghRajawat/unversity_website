@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { FaDownload, FaPrint, FaCheckCircle, FaClock, FaMapMarkerAlt, FaCalendar, FaSpinner } from 'react-icons/fa';
 import StudentNavbar from '../components/StudentNavbar';
-import ApiService from '../services/api';
+import  { backendUrl } from '../services/api';
 
 const StudentAdmitCard = () => {
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+ 
     const [selectedCard, setSelectedCard] = useState(null);
   const [admitCards, setAdmitCards] = useState([]);
   const [studentData, setStudentData] = useState(null);

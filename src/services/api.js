@@ -1,6 +1,9 @@
 // Comprehensive API service for University frontend
-const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
-const API_BASE_URL = `${backendUrl}/api`;
+export const backendUrl =
+  import.meta.env.REACT_APP_API_URL ||
+  import.meta.env.VITE_BACKEND_URL ||
+  'https://kishangarhcollege.in';
+const API_BASE_URL = `${backendUrl}`;
 
 class ApiService {
   constructor() {

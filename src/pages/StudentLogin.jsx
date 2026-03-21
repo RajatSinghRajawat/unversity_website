@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaUser, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { backendUrl } from '../services/api';
 
 const StudentLogin = () => {
   const navigate = useNavigate();
@@ -22,8 +23,6 @@ const StudentLogin = () => {
     });
     setError('');
   };
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');

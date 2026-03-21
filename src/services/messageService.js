@@ -1,5 +1,7 @@
 // Simple Message Service for University Frontend
-const API_BASE_URL = '${backendUrl}/api';
+import { backendUrl } from './api';
+
+const API_BASE_URL = backendUrl;
 
 class MessageService {
   // Get messages for a student

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCalendarAlt, FaIdCard, FaGraduationCap, FaUserTie, FaExclamationTriangle, FaSpinner } from 'react-icons/fa';
 import StudentNavbar from '../components/StudentNavbar';
+import  { backendUrl } from '../services/api';
 
 const StudentProfile = () => {
-    const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [studentData, setStudentData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
