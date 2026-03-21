@@ -1,13 +1,10 @@
-// Simple Message Service for University Frontend
-import { backendUrl } from './api';
 
-const API_BASE_URL = backendUrl;
 
 class MessageService {
   // Get messages for a student
   async getStudentMessages(email, universityCode = 'GYAN001') {
     try {
-      const response = await fetch(`${API_BASE_URL}/messages/student?email=${email}&universityCode=${universityCode}&limit=50`);
+      const response = await fetch(`/messages/student?email=${email}&universityCode=${universityCode}&limit=50`);
       const data = await response.json();
       return data;
     } catch (error) {
@@ -19,7 +16,7 @@ class MessageService {
   // Create a new message
   async createMessage(messageData) {
     try {
-      const response = await fetch(`${API_BASE_URL}/messages/create`, {
+      const response = await fetch(`/messages/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -37,7 +34,7 @@ class MessageService {
   // Mark message as read
   async markAsRead(messageId) {
     try {
-      const response = await fetch(`${API_BASE_URL}/messages/${messageId}/read`, {
+      const response = await fetch(`/messages/${messageId}/read`, {
         method: 'PUT'
       });
       const data = await response.json();
@@ -51,7 +48,7 @@ class MessageService {
   // Delete message
   async deleteMessage(messageId) {
     try {
-      const response = await fetch(`${API_BASE_URL}/messages/${messageId}`, {
+      const response = await fetch(`/messages/${messageId}`, {
         method: 'DELETE'
       });
       const data = await response.json();
@@ -65,7 +62,7 @@ class MessageService {
   // Reply to a message
   async replyToMessage(messageId, replyData) {
     try {
-      const response = await fetch(`${API_BASE_URL}/messages/${messageId}/reply`, {
+      const response = await fetch(`/messages/${messageId}/reply`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
