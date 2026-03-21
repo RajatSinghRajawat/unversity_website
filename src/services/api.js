@@ -1,9 +1,7 @@
-
-const API_BASE_URL = " "
-
+export const API_BASE_URL = import.meta.env.VITE_REACT_APP_API_URL;
 class ApiService {
   constructor() {
-    this.baseURL = " ";
+    this.baseURL = API_BASE_URL;
   }
 
   // Get headers for API requests

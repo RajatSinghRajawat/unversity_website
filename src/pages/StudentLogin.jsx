@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaUser, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
-
+import { API_BASE_URL } from '../services/api';
 
 const StudentLogin = () => {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ const StudentLogin = () => {
       };
       
       const response = await fetch(
-        `/api/students/search-email-password/?email=${formData.email}&password=${formData.password}`, 
+        `${API_BASE_URL}/api/students/search-email-password/?email=${formData.email}&password=${formData.password}`, 
         requestOptions
       );
       
