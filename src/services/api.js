@@ -1,9 +1,17 @@
 // Comprehensive API service for University frontend
+const sanitizeBaseUrl = (value) => {
+  if (!value) return '';
+  const normalized = String(value).trim();
+  if (!normalized || normalized === 'undefined' || normalized === 'null') return '';
+  return normalized.replace(/\/+$/, '');
+};
+
+const envBackendUrl = sanitizeBaseUrl(import.meta.env.REACT_APP_API_URL);
+const viteBackendUrl = sanitizeBaseUrl(import.meta.env.VITE_BACKEND_URL);
+
 export const backendUrl =
-  import.meta.env.REACT_APP_API_URL ||
-  import.meta.env.VITE_BACKEND_URL ||
-  'https://kishangarhcollege.in';
-const API_BASE_URL = `${backendUrl}`;
+  envBackendUrl || viteBackendUrl || 'https://kishangarhcollege.in';
+const API_BASE_URL = backendUrl;
 
 class ApiService {
   constructor() {
