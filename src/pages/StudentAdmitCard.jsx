@@ -4,6 +4,10 @@ import StudentNavbar from '../components/StudentNavbar';
 import  { backendUrl } from '../services/api';
 
 const StudentAdmitCard = () => {
+  const safeBackendUrl =
+    typeof backendUrl === 'string' && backendUrl.trim() && backendUrl !== 'undefined'
+      ? backendUrl
+      : 'https://kishangarhcollege.in';
 
  
     const [selectedCard, setSelectedCard] = useState(null);
@@ -45,7 +49,7 @@ const StudentAdmitCard = () => {
 
       console.log('🔍 Fetching admit cards for student:', studentId);
       
-      const response = await fetch(`${backendUrl}/api/admitcards/student/${studentId}`, {
+      const response = await fetch(`${safeBackendUrl}/api/admitcards/student/${studentId}`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json'

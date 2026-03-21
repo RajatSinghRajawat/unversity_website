@@ -5,6 +5,10 @@ import { backendUrl } from '../services/api';
 
 const StudentLogin = () => {
   const navigate = useNavigate();
+  const safeBackendUrl =
+    typeof backendUrl === 'string' && backendUrl.trim() && backendUrl !== 'undefined'
+      ? backendUrl
+      : 'https://kishangarhcollege.in';
   
   const [formData, setFormData] = useState({
     email: '',
@@ -35,7 +39,7 @@ const StudentLogin = () => {
       };
       
       const response = await fetch(
-        `${backendUrl}/api/students/search-email-password/?email=${formData.email}&password=${formData.password}`, 
+        `${safeBackendUrl}/api/students/search-email-password/?email=${formData.email}&password=${formData.password}`, 
         requestOptions
       );
       

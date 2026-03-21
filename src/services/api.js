@@ -7,10 +7,8 @@ const sanitizeBaseUrl = (value) => {
 };
 
 const envBackendUrl = sanitizeBaseUrl(import.meta.env.REACT_APP_API_URL);
-const viteBackendUrl = sanitizeBaseUrl(import.meta.env.VITE_BACKEND_URL);
 
-export const backendUrl =
-  envBackendUrl || viteBackendUrl || 'https://kishangarhcollege.in';
+export const backendUrl = envBackendUrl || 'https://kishangarhcollege.in';
 const API_BASE_URL = backendUrl;
 
 class ApiService {
