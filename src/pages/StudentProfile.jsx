@@ -8,6 +8,9 @@ const StudentProfile = () => {
     typeof backendUrl === 'string' && backendUrl.trim() && backendUrl !== 'undefined'
       ? backendUrl
       : 'https://kishangarhcollege.in';
+
+      console.log(safeBackendUrl,"safeBackendUrl");
+      
   const [studentData, setStudentData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

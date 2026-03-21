@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaUser, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
-import { backendUrl } from '../services/api';
+
 
 const StudentLogin = () => {
   const navigate = useNavigate();
-  const safeBackendUrl =
-    typeof backendUrl === 'string' && backendUrl.trim() && backendUrl !== 'undefined'
-      ? backendUrl
-      : 'https://kishangarhcollege.in';
+ 
   
   const [formData, setFormData] = useState({
     email: '',
@@ -39,9 +36,10 @@ const StudentLogin = () => {
       };
       
       const response = await fetch(
-        `${safeBackendUrl}/api/students/search-email-password/?email=${formData.email}&password=${formData.password}`, 
+        `/api/students/search-email-password/?email=${formData.email}&password=${formData.password}`, 
         requestOptions
       );
+      
       
       const result = await response.json();
       
