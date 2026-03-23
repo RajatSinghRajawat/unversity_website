@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCalendarAlt, FaIdCard, FaGraduationCap, FaUserTie, FaExclamationTriangle, FaSpinner } from 'react-icons/fa';
 import StudentNavbar from '../components/StudentNavbar';
-import { API_BASE_URL } from '../services/api';
+import ApiService from '../services/api';
 
 const StudentProfile = () => {
   const [studentData, setStudentData] = useState(null);
@@ -60,9 +60,7 @@ const StudentProfile = () => {
         queryParams.append('universityCode', credentials.universityCode);
       }
 
-      // Try the direct email/password search endpoint first
-      const response = await fetch(`${API_BASE_URL}/api/students/search?${queryParams}`);
-      const result = await response.json();
+      const { data: result } = await ApiService.studentProfileSearch(queryParams);
 
       if (result.success && result.data) {
         // Handle both single object and array responses

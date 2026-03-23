@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaUser, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
-import { API_BASE_URL } from '../services/api';
+import ApiService from '../services/api';
 
 const StudentLogin = () => {
   const navigate = useNavigate();
@@ -30,20 +30,12 @@ const StudentLogin = () => {
     setLoading(true);
 
     try {
-      const requestOptions = {
-        method: "GET",
-        redirect: "follow"
-      };
-      
-      const response = await fetch(
-        `${API_BASE_URL}/api/students/search-email-password/?email=${formData.email}&password=${formData.password}`, 
-        requestOptions
+      const { ok, data: result } = await ApiService.studentLoginSearch(
+        formData.email,
+        formData.password
       );
-      
-      
-      const result = await response.json();
-      
-      if (response.ok && result.success) {
+
+      if (ok && result.success) {
         // Store student login status and data
         localStorage.setItem('studentLoggedIn', 'true');
         localStorage.setItem('studentData', JSON.stringify(result.data));

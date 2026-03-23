@@ -1,9 +1,8 @@
-export const API_BASE_URL = import.meta.env.VITE_REACT_APP_API_URL;
-class ApiService {
-  constructor() {
-    this.baseURL = API_BASE_URL;
-  }
+const rawBase = import.meta.env.VITE_REACT_APP_API_URL;
+export const API_BASE_URL =
+  typeof rawBase === 'string' ? rawBase.replace(/\/$/, '') : '';
 
+class ApiService {
   // Get headers for API requests
   getHeaders() {
     const headers = {
@@ -21,7 +20,7 @@ class ApiService {
 
   // Generic request method with error handling
   async request(endpoint, options = {}) {
-    const url = `${this.baseURL}${endpoint}`;
+    const url = `${API_BASE_URL}${endpoint}`;
     const config = {
       headers: this.getHeaders(),
       ...options,
@@ -49,6 +48,49 @@ class ApiService {
       console.error('API Request failed:', error);
       throw error;
     }
+  }
+
+  /**
+   * Same as request but does not throw on non-OK HTTP status (for flows that read success/message from body).
+   */
+  async requestWithMeta(endpoint, options = {}) {
+    const url = `${API_BASE_URL}${endpoint}`;
+    const config = {
+      headers: this.getHeaders(),
+      ...options,
+    };
+
+    const response = await fetch(url, config);
+    const contentType = response.headers.get('content-type');
+    let data;
+    if (contentType && contentType.includes('application/json')) {
+      data = await response.json();
+    } else {
+      data = await response.text();
+    }
+    return { ok: response.ok, status: response.status, data };
+  }
+
+  async studentLoginSearch(email, password) {
+    const params = new URLSearchParams({ email, password });
+    return this.requestWithMeta(
+      `/api/students/search-email-password/?${params.toString()}`,
+      { method: 'GET' }
+    );
+  }
+
+  async studentProfileSearch(queryParams) {
+    const qs =
+      queryParams instanceof URLSearchParams
+        ? queryParams.toString()
+        : new URLSearchParams(queryParams).toString();
+    return this.requestWithMeta(`/api/students/search?${qs}`, { method: 'GET' });
+  }
+
+  async getStudentAdmitCardsPortal(studentId) {
+    return this.requestWithMeta(`/api/admitcards/student/${studentId}`, {
+      method: 'GET',
+    });
   }
 
   // Student APIs

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaDownload, FaPrint, FaCheckCircle, FaClock, FaMapMarkerAlt, FaCalendar, FaSpinner } from 'react-icons/fa';
 import StudentNavbar from '../components/StudentNavbar';
-import { API_BASE_URL } from '../services/api';
+import ApiService from '../services/api';
 const StudentAdmitCard = () => {
  
     const [selectedCard, setSelectedCard] = useState(null);
@@ -43,18 +43,12 @@ const StudentAdmitCard = () => {
 
       console.log('🔍 Fetching admit cards for student:', studentId);
       
-      const response = await fetch(`${API_BASE_URL}/api/admitcards/student/${studentId}`, {
-        method: "GET",
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
+      const { ok, status, data: result } =
+        await ApiService.getStudentAdmitCardsPortal(studentId);
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (!ok) {
+        throw new Error(`HTTP error! status: ${status}`);
       }
-
-      const result = await response.json();
       console.log('📋 API Response:', result);
 
       if (result.success) {
