@@ -101,6 +101,7 @@ class MessageService {
       }
     } catch (error) {
       formattedDate = 'Invalid date';
+      
     }
     
     return {
