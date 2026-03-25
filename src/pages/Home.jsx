@@ -86,7 +86,7 @@ const Home = () => {
     card: null,
   });
   const [activeTab, setActiveTab] = useState("nav-alumni");
-  
+
   // Dynamic data states
   const [dynamicData, setDynamicData] = useState({
     students: [],
@@ -162,14 +162,14 @@ const Home = () => {
         setDynamicData(prev => ({ ...prev, loading: false }));
       }
     };
-    
+
     loadDynamicData();
   }, []);
 
   const floatingButtons = [
-    { 
-      icon: FaUser, 
-      title: "Student Login", 
+    {
+      icon: FaUser,
+      title: "Student Login",
       action: () => {
         // Check if user is already logged in
         const isLoggedIn = localStorage.getItem('studentToken');
@@ -181,21 +181,21 @@ const Home = () => {
       },
       color: 'bg-blue-600 hover:bg-blue-700'
     },
-    { 
-      icon: FaGraduationCap, 
-      title: "Programs", 
+    {
+      icon: FaGraduationCap,
+      title: "Programs",
       action: () => scrollToSection('programs'),
       color: 'bg-purple-600 hover:bg-purple-700'
     },
-    { 
-      icon: FaBuilding, 
-      title: "About Us", 
+    {
+      icon: FaBuilding,
+      title: "About Us",
       action: () => scrollToSection('about'),
       color: 'bg-indigo-600 hover:bg-indigo-700'
     },
-    { 
-      icon: FaQuestionCircle, 
-      title: "Help & Support", 
+    {
+      icon: FaQuestionCircle,
+      title: "Help & Support",
       action: () => {
         // Open help modal or redirect to help page
         const helpMessage = "Welcome to Kishangarh law college (CO-EDU) Help Center!\n\nFor immediate assistance:\n• Call: +91-9649107150\n• Email: kishangarhgirls@gmail.com, kishangarhlawcollege@gmail.com\n• WhatsApp: +91-9649107150";
@@ -203,18 +203,18 @@ const Home = () => {
       },
       color: 'bg-green-600 hover:bg-green-700'
     },
-    { 
-      icon: FaWhatsapp, 
-      title: "WhatsApp", 
+    {
+      icon: FaWhatsapp,
+      title: "WhatsApp",
       action: () => {
         const message = encodeURIComponent("Hello! I'm interested in Kishangarh law college (CO-EDU). Can you provide more information?");
         window.open(`https://wa.me/919649107150?text=${message}`, '_blank');
       },
       color: 'bg-green-500 hover:bg-green-600'
     },
-    { 
-      icon: FaPhoneAlt, 
-      title: "Call Now", 
+    {
+      icon: FaPhoneAlt,
+      title: "Call Now",
       action: () => {
         // Show confirmation before calling
         if (confirm("Do you want to call Kishangarh law college (CO-EDU)?\n\nPhone: +91-9649107150")) {
@@ -275,7 +275,7 @@ const Home = () => {
       ...prev,
       [section]: !prev[section]
     }));
-    
+
     // Update items to show
     setItemsToShow(prev => ({
       ...prev,
@@ -295,7 +295,7 @@ const Home = () => {
       
       Published: ${new Date().toLocaleDateString()}
     `;
-    
+
     alert(expandedContent);
   };
 
@@ -424,9 +424,8 @@ const Home = () => {
         {HERO_IMAGES.map((img, index) => (
           <div
             key={index}
-            className={`absolute inset-0 transition-opacity duration-1000 ${
-              index === currentImage ? "opacity-100 z-10" : "opacity-0 z-0"
-            }`}
+            className={`absolute inset-0 transition-opacity duration-1000 ${index === currentImage ? "opacity-100 z-10" : "opacity-0 z-0"
+              }`}
           >
             <img
               src={img}
@@ -435,12 +434,24 @@ const Home = () => {
             />
             <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 via-blue-800/70 to-transparent flex items-center">
               <div className="max-w-7xl mx-auto px-4 w-full animate-fadeInUp">
-                <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-2xl">
-                  Kishangarh law college (CO-EDU)
-                </h1>
-                <p className="text-xl md:text-2xl text-blue-100 mb-6 drop-shadow-lg">
-                  Empowering Women Through Education
-                </p>
+                <div className="flex">
+                  <div>
+                    <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-2xl">
+                      Kishangarh Girls College
+                    </h1>
+                    <p className="text-xl md:text-2xl text-blue-100 mb-6 drop-shadow-lg">
+                      Empowering Women Through Education
+                    </p>
+                  </div>
+                  <div>
+                    <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-2xl">
+                      Kishangarh law college (CO-EDU)
+                    </h1>
+                    <p className="text-xl md:text-2xl text-blue-100 mb-6 drop-shadow-lg">
+                      Empowering Women Through Education
+                    </p>
+                  </div>
+                </div>
                 <p className="text-lg text-white/90 max-w-2xl drop-shadow">
                   Recognized by Rajasthan Government and Dr Bhimrao Ambedkar law University Jaipur
                 </p>
@@ -457,6 +468,10 @@ const Home = () => {
                   >
                     Apply Now
                   </button>
+                  <button className="bg-white hover:bg-blue-50 text-blue-900 px-8 py-3 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+                  >
+                    Women Empowerment
+                  </button>
                 </div>
               </div>
             </div>
@@ -470,11 +485,10 @@ const Home = () => {
               onClick={() => {
                 // This would need state management for manual navigation
               }}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                index === currentImage
-                  ? "bg-yellow-400 w-8"
-                  : "bg-white/50 hover:bg-white/75"
-              }`}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentImage
+                ? "bg-yellow-400 w-8"
+                : "bg-white/50 hover:bg-white/75"
+                }`}
               aria-label={`Go to slide ${index + 1}`}
             />
           ))}
@@ -483,9 +497,9 @@ const Home = () => {
 
       <div className="fixed top-1/3 right-4 flex flex-col space-y-3 z-50">
         {floatingButtons.map((btn, index) => (
-          <FloatingButton 
-            key={index} 
-            icon={btn.icon} 
+          <FloatingButton
+            key={index}
+            icon={btn.icon}
             title={btn.title}
             onClick={btn.action}
             className={`${btn.color} shadow-xl hover:shadow-2xl transform hover:scale-110 transition-all duration-300 rounded-full`}
@@ -512,7 +526,7 @@ const Home = () => {
             <p className="text-blue-200 text-lg">Empowering Women Through Education</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div 
+            <div
               className="text-center bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 border border-white/20 cursor-pointer animate-fadeInUp stat-number"
               style={{ animationDelay: '0.1s' }}
               onClick={() => handleDynamicAction('viewStats')}
@@ -521,7 +535,7 @@ const Home = () => {
               <div className="text-3xl font-bold mb-1 stat-number">{dynamicData.loading ? '...' : dynamicData.stats.totalStudents}+</div>
               <div className="text-sm opacity-90 font-medium">Total Students</div>
             </div>
-            <div 
+            <div
               className="text-center bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 border border-white/20 cursor-pointer animate-fadeInUp stat-number"
               style={{ animationDelay: '0.2s' }}
               onClick={() => handleDynamicAction('moreAboutAcademics')}
@@ -530,7 +544,7 @@ const Home = () => {
               <div className="text-3xl font-bold mb-1 stat-number">{dynamicData.loading ? '...' : dynamicData.stats.totalCourses}</div>
               <div className="text-sm opacity-90 font-medium">Active Courses</div>
             </div>
-            <div 
+            <div
               className="text-center bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 border border-white/20 cursor-pointer animate-fadeInUp stat-number"
               style={{ animationDelay: '0.3s' }}
               onClick={() => handleDynamicAction('viewStats')}
@@ -539,7 +553,7 @@ const Home = () => {
               <div className="text-3xl font-bold mb-1 stat-number">95%</div>
               <div className="text-sm opacity-90 font-medium">Success Rate</div>
             </div>
-            <div 
+            <div
               className="text-center bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 border border-white/20 cursor-pointer animate-fadeInUp stat-number"
               style={{ animationDelay: '0.4s' }}
               onClick={() => handleDynamicAction('moreAboutCollege')}
@@ -575,16 +589,15 @@ const Home = () => {
                   className={`card-image ${card.big ? "h-80" : "h-64"} group-hover:scale-110 transition-transform duration-500`}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                
+
                 {/* Interactive buttons */}
                 <div className="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <button
                     onClick={() => handleLike(card.id, "news")}
-                    className={`p-2 rounded-full shadow-lg transition-all duration-200 ${
-                      likedItems.has(`news-${card.id}`) 
-                        ? 'bg-red-500 text-white' 
-                        : 'bg-white/80 text-gray-700 hover:bg-red-500 hover:text-white'
-                    }`}
+                    className={`p-2 rounded-full shadow-lg transition-all duration-200 ${likedItems.has(`news-${card.id}`)
+                      ? 'bg-red-500 text-white'
+                      : 'bg-white/80 text-gray-700 hover:bg-red-500 hover:text-white'
+                      }`}
                   >
                     <FaHeart className="text-sm" />
                   </button>
@@ -597,11 +610,10 @@ const Home = () => {
                 </div>
 
                 <button
-                  className={`absolute bottom-4 right-4 bg-yellow-400 text-black p-3 rounded-full shadow-lg transform transition-all duration-300 hover:bg-yellow-500 ${
-                    hoveredStates.news === card.id
-                      ? "rotate-45 opacity-100 scale-110"
-                      : "opacity-0"
-                  }`}
+                  className={`absolute bottom-4 right-4 bg-yellow-400 text-black p-3 rounded-full shadow-lg transform transition-all duration-300 hover:bg-yellow-500 ${hoveredStates.news === card.id
+                    ? "rotate-45 opacity-100 scale-110"
+                    : "opacity-0"
+                    }`}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDynamicAction('readMoreNews', card);
@@ -630,10 +642,10 @@ const Home = () => {
                   {card.title}
                 </h3>
                 <p className="card-desc text-gray-600 leading-relaxed mb-4">{card.desc}</p>
-                
+
                 {/* Action buttons */}
                 <div className="mt-4 flex items-center justify-between">
-                  <button 
+                  <button
                     className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-2 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 flex items-center space-x-2 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                     onClick={() => handleDynamicAction('readMoreNews', card)}
                   >
@@ -662,9 +674,9 @@ const Home = () => {
           ))}
         </div>
         <div className="text-center mt-12">
-          <ActionButton 
-            text={viewMoreStates.news ? "Show Less News" : "More Kishangarh law college (CO-EDU) News"} 
-            onClick={() => handleDynamicAction('readMoreNews')} 
+          <ActionButton
+            text={viewMoreStates.news ? "Show Less News" : "More Kishangarh law college (CO-EDU) News"}
+            onClick={() => handleDynamicAction('readMoreNews')}
           />
         </div>
       </section>
@@ -690,13 +702,12 @@ const Home = () => {
                   className="card-image h-64 group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                
+
                 <button
-                  className={`absolute bottom-4 right-4 bg-yellow-400 text-black p-3 rounded-full shadow-lg transform transition-all duration-300 hover:bg-yellow-500 ${
-                    hoveredStates.program === card.id
-                      ? "rotate-45 opacity-100 scale-110"
-                      : "opacity-0"
-                  }`}
+                  className={`absolute bottom-4 right-4 bg-yellow-400 text-black p-3 rounded-full shadow-lg transform transition-all duration-300 hover:bg-yellow-500 ${hoveredStates.program === card.id
+                    ? "rotate-45 opacity-100 scale-110"
+                    : "opacity-0"
+                    }`}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDynamicAction('viewProgram', card);
@@ -715,9 +726,9 @@ const Home = () => {
           ))}
         </div>
         <div className="text-center mt-12">
-          <ActionButton 
-            text={viewMoreStates.programs ? "Show Less Programs" : "More About Academics"} 
-            onClick={() => handleDynamicAction('moreAboutAcademics')} 
+          <ActionButton
+            text={viewMoreStates.programs ? "Show Less Programs" : "More About Academics"}
+            onClick={() => handleDynamicAction('moreAboutAcademics')}
           />
         </div>
       </section>
@@ -765,13 +776,12 @@ const Home = () => {
                   {event.date}
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                
+
                 <button
-                  className={`absolute bottom-4 right-4 bg-yellow-400 text-black p-3 rounded-full shadow-lg transform transition-all duration-300 hover:bg-yellow-500 ${
-                    hoveredStates.event === event.id
-                      ? "rotate-45 opacity-100 scale-110"
-                      : "opacity-0"
-                  }`}
+                  className={`absolute bottom-4 right-4 bg-yellow-400 text-black p-3 rounded-full shadow-lg transform transition-all duration-300 hover:bg-yellow-500 ${hoveredStates.event === event.id
+                    ? "rotate-45 opacity-100 scale-110"
+                    : "opacity-0"
+                    }`}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDynamicAction('viewEvent', event);
@@ -789,9 +799,9 @@ const Home = () => {
           ))}
         </div>
         <div className="text-center mt-12">
-          <ActionButton 
-            text={viewMoreStates.events ? "Show Less Events" : "View More Events"} 
-            onClick={() => handleDynamicAction('viewMoreEvents')} 
+          <ActionButton
+            text={viewMoreStates.events ? "Show Less Events" : "View More Events"}
+            onClick={() => handleDynamicAction('viewMoreEvents')}
           />
         </div>
       </section>
@@ -834,13 +844,12 @@ const Home = () => {
                   className="card-image h-64 group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                
+
                 <button
-                  className={`absolute bottom-4 right-4 bg-yellow-400 text-black p-3 rounded-full shadow-lg transform transition-all duration-300 hover:bg-yellow-500 ${
-                    hoveredStates.research === card.id
-                      ? "rotate-45 opacity-100 scale-110"
-                      : "opacity-0"
-                  }`}
+                  className={`absolute bottom-4 right-4 bg-yellow-400 text-black p-3 rounded-full shadow-lg transform transition-all duration-300 hover:bg-yellow-500 ${hoveredStates.research === card.id
+                    ? "rotate-45 opacity-100 scale-110"
+                    : "opacity-0"
+                    }`}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDynamicAction('viewFacility', card);
@@ -859,9 +868,9 @@ const Home = () => {
           ))}
         </div>
         <div className="text-center mt-12">
-          <ActionButton 
-            text={viewMoreStates.facilities ? "Show Less Facilities" : "More Facilities Details"} 
-            onClick={() => handleDynamicAction('moreFacilities')} 
+          <ActionButton
+            text={viewMoreStates.facilities ? "Show Less Facilities" : "More Facilities Details"}
+            onClick={() => handleDynamicAction('moreFacilities')}
           />
         </div>
       </section>
@@ -903,7 +912,7 @@ const Home = () => {
                   className="card-image h-64 group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                
+
                 <button
                   className="absolute bottom-4 right-4 bg-yellow-400 text-black p-3 rounded-full shadow-lg transform transition-all duration-300 hover:bg-yellow-500 opacity-0 group-hover:opacity-100 rotate-45 scale-110"
                   onClick={(e) => {
@@ -924,9 +933,9 @@ const Home = () => {
           ))}
         </div>
         <div className="text-center mt-12">
-          <ActionButton 
-            text={viewMoreStates.campusLife ? "Show Less Campus Life" : "Explore More Campus Life"} 
-            onClick={() => handleDynamicAction('exploreCampusLife')} 
+          <ActionButton
+            text={viewMoreStates.campusLife ? "Show Less Campus Life" : "Explore More Campus Life"}
+            onClick={() => handleDynamicAction('exploreCampusLife')}
           />
         </div>
       </section>
@@ -937,11 +946,10 @@ const Home = () => {
           {Object.keys(TESTIMONIALS).map((tab) => (
             <button
               key={tab}
-              className={`px-6 py-2 rounded-lg font-semibold transition-all duration-300 ${
-                activeTab === tab
-                  ? "bg-blue-900 text-white"
-                  : "bg-yellow-400 text-black hover:bg-blue-900 hover:text-white"
-              }`}
+              className={`px-6 py-2 rounded-lg font-semibold transition-all duration-300 ${activeTab === tab
+                ? "bg-blue-900 text-white"
+                : "bg-yellow-400 text-black hover:bg-blue-900 hover:text-white"
+                }`}
               onClick={() => setActiveTab(tab)}
             >
               {tab.replace("nav-", "").toUpperCase()}
@@ -1007,13 +1015,12 @@ const Home = () => {
                   className="card-image h-64 group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                
+
                 <button
-                  className={`absolute bottom-4 right-4 bg-yellow-400 text-black p-3 rounded-full shadow-lg transform transition-all duration-300 hover:bg-yellow-500 ${
-                    hoveredStates.card === card.id
-                      ? "rotate-45 opacity-100 scale-110"
-                      : "opacity-0"
-                  }`}
+                  className={`absolute bottom-4 right-4 bg-yellow-400 text-black p-3 rounded-full shadow-lg transform transition-all duration-300 hover:bg-yellow-500 ${hoveredStates.card === card.id
+                    ? "rotate-45 opacity-100 scale-110"
+                    : "opacity-0"
+                    }`}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDynamicAction('viewAdmission', card);
@@ -1031,9 +1038,9 @@ const Home = () => {
           ))}
         </div>
         <div className="text-center mt-12">
-          <ActionButton 
-            text={viewMoreStates.admissions ? "Show Less Admissions" : "More About Admissions"} 
-            onClick={() => handleDynamicAction('moreAdmissions')} 
+          <ActionButton
+            text={viewMoreStates.admissions ? "Show Less Admissions" : "More About Admissions"}
+            onClick={() => handleDynamicAction('moreAdmissions')}
           />
         </div>
       </section>
