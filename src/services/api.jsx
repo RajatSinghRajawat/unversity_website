@@ -144,7 +144,7 @@ class ApiService {
       if (params.isActive !== undefined) queryParams.append('isActive', params.isActive);
       
       const queryString = queryParams.toString();
-      const endpoint = `/courses/all${queryString ? `?${queryString}` : ''}`;
+      const endpoint = `/api/courses/all${queryString ? `?${queryString}` : ''}`;
       
       return await this.request(endpoint);
     } catch (error) {
@@ -160,7 +160,7 @@ class ApiService {
       if (params.universityCode) queryParams.append('universityCode', params.universityCode);
       
       const queryString = queryParams.toString();
-      const endpoint = `/courses/search?${queryString}`;
+      const endpoint = `/api/courses/search?${queryString}`;
       
       return await this.request(endpoint);
     } catch (error) {
@@ -171,7 +171,7 @@ class ApiService {
 
   async getCourseById(id) {
     try {
-      return await this.request(`/courses/get/${id}`);
+      return await this.request(`/api/courses/get/${id}`);
     } catch (error) {
       console.error('Error fetching course:', error);
       throw error;
@@ -185,7 +185,7 @@ class ApiService {
       if (params.universityCode) queryParams.append('universityCode', params.universityCode);
       
       const queryString = queryParams.toString();
-      const endpoint = `/courses/department?${queryString}`;
+      const endpoint = `/api/courses/department?${queryString}`;
       
       return await this.request(endpoint);
     } catch (error) {

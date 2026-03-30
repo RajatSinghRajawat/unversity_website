@@ -373,9 +373,11 @@ const Homegirls = () => {
         }
         break;
       case 'viewAdmission':
-        // Navigate to specific admission page
+        // Navigate to registration form
         if (data) {
-          window.location.href = `/admissions/${data.id}`;
+          window.location.href = `/admissions?admissionId=${encodeURIComponent(
+            data.id
+          )}`;
         }
         break;
       case 'downloadNews':
@@ -467,7 +469,11 @@ const Homegirls = () => {
                     Student Login
                   </button>
                   <button
-                    onClick={() => setShowApplyModal(true)}
+                    onClick={() => {
+                      const slug = localStorage.getItem("selectedCollege");
+                      const qs = slug ? `?college=${encodeURIComponent(slug)}` : "";
+                      window.location.href = `/admissions${qs}`;
+                    }}
                     className="bg-white hover:bg-blue-50 text-blue-900 px-8 py-3 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
                   >
                     Apply Now

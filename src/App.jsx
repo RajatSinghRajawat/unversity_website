@@ -10,6 +10,7 @@ import StudentAdmitCard from './pages/StudentAdmitCard';
 import StudentMessage from './pages/StudentMessage';
 import StudentProfile from './pages/StudentProfile';
 import Selectionpage from './pages/Selectionpage';
+import Admissions from './pages/Admissions';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -57,6 +58,9 @@ const App = () => {
             </PublicLayout>
           }
         />
+
+        {/* Public - Student Registration */}
+        <Route path="/admissions" element={<Admissions />} />
 
         {/* Student Login (public) */}
         <Route path="/student/login" element={

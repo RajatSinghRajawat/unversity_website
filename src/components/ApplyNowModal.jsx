@@ -6,11 +6,21 @@ const ApplyNowModal = ({ isOpen, onClose, collegeName }) => {
   if (!isOpen) return null;
 
   const handleOptionClick = () => {
-    // Agar home page par admissions section ho to smoothly scroll karke modal band kar dein.
-    const el = document.getElementById("admissions");
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    // Student direct register kar sake isliye Admissions registration page open kar rahe hain.
+    const saved = localStorage.getItem("selectedCollege");
+    let collegeSlug = saved;
+
+    if (!collegeSlug && typeof collegeName === "string") {
+      const name = collegeName.toLowerCase();
+      collegeSlug = name.includes("girls") ? "girls" : name.includes("law") ? "law" : null;
     }
+
+    if (collegeSlug) {
+      localStorage.setItem("selectedCollege", collegeSlug);
+    }
+
+    const qs = collegeSlug ? `?college=${encodeURIComponent(collegeSlug)}` : "";
+    window.location.href = `/admissions${qs}`;
     onClose?.();
   };
 
@@ -33,8 +43,8 @@ const ApplyNowModal = ({ isOpen, onClose, collegeName }) => {
         </div>
 
         <p className="text-sm text-gray-600 mb-5">
-          Admissions open hain. Neeche options me se jo bhi choose karein — admissions section
-          par le jaaya jayega.
+          Admissions open hain. “Fees / Admission Process / Brochure” wali options pe click
+          karte hi registration form open ho jayega.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -57,6 +67,13 @@ const ApplyNowModal = ({ isOpen, onClose, collegeName }) => {
             type="button"
           >
             Close
+          </button>
+          <button
+            onClick={handleOptionClick}
+            className="px-5 py-2 rounded-full bg-yellow-400 hover:bg-yellow-500 text-blue-950 font-semibold"
+            type="button"
+          >
+            Student Registration
           </button>
           <button
             onClick={() => (window.location.href = "/student/login")}

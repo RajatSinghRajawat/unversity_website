@@ -35,6 +35,12 @@ const Navbar = () => {
 
   const [showApplyModal, setShowApplyModal] = useState(false);
 
+  const handleApplyNow = () => {
+    const slug = localStorage.getItem("selectedCollege") || selectedCollege;
+    const qs = slug ? `?college=${encodeURIComponent(slug)}` : "";
+    window.location.href = `/admissions${qs}`;
+  };
+
   const accordionKeys = [
     'admissions', 'aboutUs', 'campusLife', 'academics',
     'aboutSgv', 'leadership', 'academicsSgv', 'disciplines',
@@ -336,7 +342,7 @@ const Navbar = () => {
               <span>Student Login</span>
             </button>
             <button
-              onClick={() => setShowApplyModal(true)}
+              onClick={handleApplyNow}
               className="bg-gradient-to-r from-blue-900 to-blue-800 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-yellow-600 hover:text-blue-900 transition-all duration-300 cursor-pointer font-bold text-sm shadow-lg hover:shadow-xl hover:scale-105 flex items-center space-x-2"
             >
               <span>Apply Now</span>
@@ -418,7 +424,7 @@ const Navbar = () => {
               <button
                 onClick={() => {
                   handleMenuClose();
-                  setShowApplyModal(true);
+                  handleApplyNow();
                 }}
                 className="w-full bg-gradient-to-r from-blue-900 to-blue-800 text-white px-4 py-3 rounded-full hover:from-yellow-500 hover:to-yellow-600 hover:text-blue-900 transition-all duration-300 cursor-pointer font-bold flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl"
               >

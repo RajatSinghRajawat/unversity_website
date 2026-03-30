@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
   FaHome, 
@@ -16,6 +16,18 @@ import { DEMO_STUDENT } from '../constants/studentData';
 const StudentNavbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const student = useMemo(() => {
+    try {
+      const raw = localStorage.getItem("studentData");
+      if (raw) return JSON.parse(raw);
+    } catch (e) {
+      console.error("Failed to parse studentData from localStorage:", e);
+    }
+    return null;
+  }, []);
+
+  const displayStudent = student || DEMO_STUDENT;
   
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdown, setProfileDropdown] = useState(false);
@@ -48,7 +60,7 @@ const StudentNavbar = () => {
             />
             <div className="hidden sm:block">
               <h1 className="text-lg sm:text-xl font-bold">Student Portal</h1>
-              <p className="text-xs text-blue-200">Welcome, {DEMO_STUDENT.name}</p>
+              <p className="text-xs text-blue-200">Welcome, {displayStudent?.name || "Student"}</p>
             </div>
           </div>
 
@@ -83,14 +95,20 @@ const StudentNavbar = () => {
                 <div className="h-6 sm:h-8 w-6 sm:w-8 rounded-full bg-blue-700 flex items-center justify-center">
                   <FaUser className="text-xs sm:text-sm" />
                 </div>
-                <span className="text-xs sm:text-sm font-medium hidden sm:inline">{DEMO_STUDENT.name.split(' ')[0]}</span>
+                <span className="text-xs sm:text-sm font-medium hidden sm:inline">
+                  {(displayStudent?.name || "Student").split(" ")[0]}
+                </span>
               </button>
 
               {profileDropdown && (
                 <div className="absolute right-0 mt-2 w-40 sm:w-48 bg-white rounded-md shadow-lg py-1 z-50">
                   <div className="px-3 sm:px-4 py-2 border-b border-gray-200">
-                    <p className="text-xs sm:text-sm font-medium text-gray-900">{DEMO_STUDENT.name}</p>
-                    <p className="text-xs text-gray-500">{DEMO_STUDENT.enrollmentNo}</p>
+                    <p className="text-xs sm:text-sm font-medium text-gray-900">
+                      {displayStudent?.name || "Student"}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {displayStudent?.enrollmentId || displayStudent?.enrollmentNo || "—"}
+                    </p>
                   </div>
                   <Link
                     to="/student/profile"
@@ -125,8 +143,10 @@ const StudentNavbar = () => {
         <div className="md:hidden bg-blue-800">
           <div className="px-2 pt-2 pb-3 space-y-1">
             <div className="px-3 py-2 border-b border-blue-700 mb-2">
-              <p className="text-sm text-blue-200">Welcome, {DEMO_STUDENT.name}</p>
-              <p className="text-xs text-blue-300">{DEMO_STUDENT.enrollmentNo}</p>
+              <p className="text-sm text-blue-200">Welcome, {displayStudent?.name || "Student"}</p>
+              <p className="text-xs text-blue-300">
+                {displayStudent?.enrollmentId || displayStudent?.enrollmentNo || "—"}
+              </p>
             </div>
             
             {navItems.map((item) => (

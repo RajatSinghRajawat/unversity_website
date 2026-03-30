@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaArrowRight, FaClock, FaCalendar } from 'react-icons/fa';
 import StudentNavbar from '../components/StudentNavbar';
@@ -11,6 +11,32 @@ import {
 } from '../constants/studentData';
 
 const StudentHome = () => {
+  const [student, setStudent] = useState(null);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("studentData");
+      if (raw) setStudent(JSON.parse(raw));
+    } catch (e) {
+      console.error("Failed to parse studentData from localStorage:", e);
+    }
+  }, []);
+
+  const displayStudent = useMemo(() => {
+    if (student) return student;
+    return DEMO_STUDENT;
+  }, [student]);
+
+  const courseName = displayStudent?.course_id?.courseName || displayStudent?.course || "";
+  const enrollmentNo =
+    displayStudent?.enrollmentId || displayStudent?.enrollmentNo || "—";
+  const semesterText =
+    displayStudent?.semester ||
+    displayStudent?.course_id?.semester ||
+    (displayStudent?.course_id?.semester ? displayStudent.course_id.semester : "");
+  const batchStart = displayStudent?.batch ? displayStudent.batch.split("-")[0] : "";
+  const batchEnd = displayStudent?.batch ? displayStudent.batch.split("-")[1] : "";
+
   return (
     <div className="min-h-screen bg-gray-50">
       <StudentNavbar />
@@ -20,22 +46,28 @@ const StudentHome = () => {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
               <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2">
-                Welcome back, {DEMO_STUDENT.name}! 👋
+                Welcome back, {displayStudent?.name || "Student"}! 👋
               </h1>
-              <p className="text-blue-100 text-sm sm:text-base lg:text-lg">{DEMO_STUDENT.course}</p>
+              <p className="text-blue-100 text-sm sm:text-base lg:text-lg">
+                {courseName || displayStudent?.department || "Your Program"}
+              </p>
               <p className="text-blue-200 text-xs sm:text-sm">
-                {DEMO_STUDENT.enrollmentNo} | {DEMO_STUDENT.semester}
+                {enrollmentNo} {semesterText ? `| ${semesterText}` : ""}
               </p>
             </div>
             
             <div className="flex items-center space-x-4">
               <div className="text-center">
-                <p className="text-lg sm:text-xl lg:text-2xl font-bold">{DEMO_STUDENT.batch.split('-')[0]}</p>
+                <p className="text-lg sm:text-xl lg:text-2xl font-bold">
+                  {batchStart || displayStudent?.year || "—"}
+                </p>
                 <p className="text-xs text-blue-200">Batch Start</p>
               </div>
               <div className="h-8 sm:h-12 w-px bg-blue-400"></div>
               <div className="text-center">
-                <p className="text-lg sm:text-xl lg:text-2xl font-bold">{DEMO_STUDENT.batch.split('-')[1]}</p>
+                <p className="text-lg sm:text-xl lg:text-2xl font-bold">
+                  {batchEnd || "—"}
+                </p>
                 <p className="text-xs text-blue-200">Expected End</p>
               </div>
             </div>
