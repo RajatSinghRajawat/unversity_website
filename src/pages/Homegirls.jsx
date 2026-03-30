@@ -55,6 +55,7 @@ import SectionHeader from "../components/common/SectionHeader";
 import ActionButton from "../components/common/ActionButton";
 import FloatingButton from "../components/common/FloatingButton";
 import ApiService from "../services/api";
+import ApplyNowModal from "../components/ApplyNowModal";
 
 import {
   HERO_IMAGES,
@@ -76,6 +77,14 @@ const Homegirls = () => {
   const [showTopBtn, scrollToTop] = useScrollToTop(200);
   const animatedAboutNumbers = useAnimatedNumbers(ABOUT_DATA);
   const animatedAchievementNumbers = useAnimatedNumbers(ACHIEVEMENT_DATA);
+
+  const selectedCollege = localStorage.getItem("selectedCollege");
+  const collegeName =
+    selectedCollege === "law"
+      ? "Kishangarh law college (CO-EDU)"
+      : "Kishangarh Girls College";
+
+  const [showApplyModal, setShowApplyModal] = useState(false);
 
   const [hoveredStates, setHoveredStates] = useState({
     news: null,
@@ -198,7 +207,8 @@ const Homegirls = () => {
       title: "Help & Support",
       action: () => {
         // Open help modal or redirect to help page
-        const helpMessage = "Welcome to Kishangarh law college (CO-EDU) Help Center!\n\nFor immediate assistance:\n• Call: +91-9649107150\n• Email: kishangarhgirls@gmail.com, kishangarhlawcollege@gmail.com\n• WhatsApp: +91-9649107150";
+        const helpMessage =
+          "Welcome to Kishangarh Girls College Help Center!\n\nFor immediate assistance:\n• Call: +91-9649107150\n• Email: kishangarhgirls@gmail.com\n• WhatsApp: +91-9649107150";
         alert(helpMessage);
       },
       color: 'bg-green-600 hover:bg-green-700'
@@ -207,7 +217,9 @@ const Homegirls = () => {
       icon: FaWhatsapp,
       title: "WhatsApp",
       action: () => {
-        const message = encodeURIComponent("Hello! I'm interested in Kishangarh law college (CO-EDU). Can you provide more information?");
+        const message = encodeURIComponent(
+          "Hello! I'm interested in Kishangarh Girls College. Can you provide more information?"
+        );
         window.open(`https://wa.me/919649107150?text=${message}`, '_blank');
       },
       color: 'bg-green-500 hover:bg-green-600'
@@ -217,7 +229,7 @@ const Homegirls = () => {
       title: "Call Now",
       action: () => {
         // Show confirmation before calling
-        if (confirm("Do you want to call Kishangarh law college (CO-EDU)?\n\nPhone: +91-9649107150")) {
+        if (confirm("Do you want to call Kishangarh Girls College?\n\nPhone: +91-9649107150")) {
           window.open('tel:+919649107150');
         }
       },
@@ -429,7 +441,7 @@ const Homegirls = () => {
           >
             <img
               src={img}
-              alt={`Kishangarh law college (CO-EDU) ${index + 1}`}
+              alt={`Kishangarh Girls College ${index + 1}`}
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 via-blue-800/70 to-transparent flex items-center">
@@ -438,14 +450,6 @@ const Homegirls = () => {
                   <div>
                     <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-2xl">
                       Kishangarh Girls College
-                    </h1>
-                    <p className="text-xl md:text-2xl text-blue-100 mb-6 drop-shadow-lg">
-                      Empowering Women Through Education
-                    </p>
-                  </div>
-                  <div>
-                    <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-2xl">
-                      Kishangarh law college (CO-EDU)
                     </h1>
                     <p className="text-xl md:text-2xl text-blue-100 mb-6 drop-shadow-lg">
                       Empowering Women Through Education
@@ -463,7 +467,7 @@ const Homegirls = () => {
                     Student Login
                   </button>
                   <button
-                    onClick={() => scrollToSection('admissions')}
+                    onClick={() => setShowApplyModal(true)}
                     className="bg-white hover:bg-blue-50 text-blue-900 px-8 py-3 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
                   >
                     Apply Now
@@ -522,7 +526,9 @@ const Homegirls = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-blue-800/10"></div>
         <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="text-center mb-8 animate-fadeInUp">
-            <h2 className="text-3xl md:text-4xl font-bold mb-2 animate-pulse-slow">Kishangarh law college (CO-EDU)</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-2 animate-pulse-slow">
+              Kishangarh Girls College
+            </h2>
             <p className="text-blue-200 text-lg">Empowering Women Through Education</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -568,8 +574,8 @@ const Homegirls = () => {
 
       <section id="news" className="py-16 bg-gray-100">
         <SectionHeader
-          title="Kishangarh law college (CO-EDU) Today"
-          subtitle="The latest news from Kishangarh law college (CO-EDU)"
+          title="Kishangarh Girls College Today"
+          subtitle="The latest news from Kishangarh Girls College"
         />
         <div className="news-grid max-w-7xl mx-auto px-4">
           {NEWS_CARDS.slice(0, itemsToShow.news).map((card) => (
@@ -675,7 +681,7 @@ const Homegirls = () => {
         </div>
         <div className="text-center mt-12">
           <ActionButton
-            text={viewMoreStates.news ? "Show Less News" : "More Kishangarh law college (CO-EDU) News"}
+            text={viewMoreStates.news ? "Show Less News" : "More Kishangarh Girls College News"}
             onClick={() => handleDynamicAction('readMoreNews')}
           />
         </div>
@@ -734,7 +740,7 @@ const Homegirls = () => {
       </section>
 
       <section id="why-choose-us" className="py-16 bg-gray-100">
-        <SectionHeader title="Why Kishangarh law college (CO-EDU)?" />
+        <SectionHeader title="Why Kishangarh Girls College?" />
         <div className="max-w-7xl mx-auto relative overflow-hidden">
           <div
             className="why-slider"
@@ -808,7 +814,7 @@ const Homegirls = () => {
 
       <section id="about" className="py-16 bg-white text-center">
         <SectionHeader
-          title="About Kishangarh law college (CO-EDU)"
+          title="About Kishangarh Girls College"
           subtitle="Empowering women through quality education and holistic development in a supportive environment"
         />
         <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-8 border-t border-b py-10">
@@ -822,7 +828,10 @@ const Homegirls = () => {
           ))}
         </div>
         <div className="mt-12">
-          <ActionButton text="More About Kishangarh law college (CO-EDU)" onClick={() => handleDynamicAction('moreAboutCollege')} />
+          <ActionButton
+            text="More About Kishangarh Girls College"
+            onClick={() => handleDynamicAction('moreAboutCollege')}
+          />
         </div>
       </section>
 
@@ -1044,6 +1053,12 @@ const Homegirls = () => {
           />
         </div>
       </section>
+
+      <ApplyNowModal
+        isOpen={showApplyModal}
+        onClose={() => setShowApplyModal(false)}
+        collegeName={collegeName}
+      />
     </div>
   );
 };

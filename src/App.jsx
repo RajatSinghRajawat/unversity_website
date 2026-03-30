@@ -46,9 +46,7 @@ const App = () => {
          <Route
           path="/"
           element={
-            <PublicLayout>
-              <Selectionpage />
-            </PublicLayout>
+            <Selectionpage />
           }
         />
         <Route

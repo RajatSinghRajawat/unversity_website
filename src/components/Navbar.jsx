@@ -4,6 +4,7 @@ import { useAccordion } from '../hooks/useAccordion';
 import MobileAccordion from './navbar/MobileAccordion';
 import MenuItem from './navbar/MenuItem';
 import ApiService from '../services/api';
+import ApplyNowModal from "./ApplyNowModal";
 import {
   TOP_NAV_LINKS,
   ABOUT_US_MENU,
@@ -25,6 +26,14 @@ const Navbar = () => {
     recentCourses: []
   });
   const [loading, setLoading] = useState(false);
+
+  const selectedCollege = localStorage.getItem("selectedCollege");
+  const collegeName =
+    selectedCollege === "girls"
+      ? "Kishangarh Girls College"
+      : "Kishangarh law college (CO-EDU)";
+
+  const [showApplyModal, setShowApplyModal] = useState(false);
 
   const accordionKeys = [
     'admissions', 'aboutUs', 'campusLife', 'academics',
@@ -139,7 +148,8 @@ const Navbar = () => {
   );
 
   return (
-    <header className="bg-white shadow-md sticky top-0 z-50 font-sans">
+    <>
+      <header className="bg-white shadow-md sticky top-0 z-50 font-sans">
       <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 text-white py-3 px-2 sm:px-4 flex flex-col sm:flex-row flex-wrap justify-between items-center text-xs sm:text-sm gap-2 shadow-lg">
         <div className="flex items-center space-x-4">
           <span className="bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1.5 rounded-full font-bold cursor-pointer text-xs sm:text-sm shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
@@ -172,12 +182,12 @@ const Navbar = () => {
             <img
               loading="lazy"
               src="/kishangarh-logo.svg"
-              alt="Kishangarh law college (CO-EDU) Logo"
+              alt={`${collegeName} Logo`}
               className="h-10 sm:h-12 cursor-pointer hover:scale-105 transition-transform duration-300"
             />
             <div className="hidden sm:block">
               <div className="text-blue-900 font-bold text-sm sm:text-base">
-                Kishangarh law college (CO-EDU)
+                {collegeName}
               </div>
               <div className="text-blue-700 text-xs sm:text-sm">
                 Devta Road, Bambora (Kishangarh) Alwar
@@ -325,7 +335,10 @@ const Navbar = () => {
               <FaUser className="text-sm" />
               <span>Student Login</span>
             </button>
-            <button className="bg-gradient-to-r from-blue-900 to-blue-800 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-yellow-600 hover:text-blue-900 transition-all duration-300 cursor-pointer font-bold text-sm shadow-lg hover:shadow-xl hover:scale-105 flex items-center space-x-2">
+            <button
+              onClick={() => setShowApplyModal(true)}
+              className="bg-gradient-to-r from-blue-900 to-blue-800 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-yellow-600 hover:text-blue-900 transition-all duration-300 cursor-pointer font-bold text-sm shadow-lg hover:shadow-xl hover:scale-105 flex items-center space-x-2"
+            >
               <span>Apply Now</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -402,7 +415,13 @@ const Navbar = () => {
                 <FaUser />
                 <span>Student Login</span>
               </button>
-              <button className="w-full bg-gradient-to-r from-blue-900 to-blue-800 text-white px-4 py-3 rounded-full hover:from-yellow-500 hover:to-yellow-600 hover:text-blue-900 transition-all duration-300 cursor-pointer font-bold flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl">
+              <button
+                onClick={() => {
+                  handleMenuClose();
+                  setShowApplyModal(true);
+                }}
+                className="w-full bg-gradient-to-r from-blue-900 to-blue-800 text-white px-4 py-3 rounded-full hover:from-yellow-500 hover:to-yellow-600 hover:text-blue-900 transition-all duration-300 cursor-pointer font-bold flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl"
+              >
                 <span>Apply Now</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -437,7 +456,7 @@ const Navbar = () => {
               onToggle={() => toggleAccordion('aboutUs')}
             >
               <MobileAccordion
-                title="About Us @ Kishangarh law college (CO-EDU)"
+              title={`About Us @ ${collegeName}`}
                 isOpen={accordionStates.aboutSgv}
                 onToggle={() => toggleAccordion('aboutSgv')}
               >
@@ -470,7 +489,7 @@ const Navbar = () => {
               onToggle={() => toggleAccordion('academics')}
             >
               <MobileAccordion
-                title="Academics @ Kishangarh law college (CO-EDU)"
+                title={`Academics @ ${collegeName}`}
                 isOpen={accordionStates.academicsSgv}
                 onToggle={() => toggleAccordion('academicsSgv')}
               >
@@ -514,7 +533,7 @@ const Navbar = () => {
               onToggle={() => toggleAccordion('campusLife')}
             >
               <MobileAccordion
-                title="Campus Life @ Kishangarh law college (CO-EDU)"
+                title={`Campus Life @ ${collegeName}`}
                 isOpen={accordionStates.campusSgv}
                 onToggle={() => toggleAccordion('campusSgv')}
               >
@@ -531,7 +550,13 @@ const Navbar = () => {
         </div>
       )}
 
-    </header>
+      </header>
+      <ApplyNowModal
+        isOpen={showApplyModal}
+        onClose={() => setShowApplyModal(false)}
+        collegeName={collegeName}
+      />
+    </>
   );
 };
 

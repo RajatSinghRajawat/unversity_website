@@ -9,6 +9,12 @@ import {
 } from "../constants/data";
 
 const Footer = () => {
+  const selectedCollege = localStorage.getItem("selectedCollege");
+  const collegeName =
+    selectedCollege === "girls"
+      ? "Kishangarh Girls College"
+      : "Kishangarh law college (CO-EDU)";
+
   const footerSections = [
     { title: "SCHOOLS", items: FOOTER_SCHOOLS },
     { title: "ADMISSIONS 2025", items: FOOTER_ADMISSIONS },
@@ -54,7 +60,7 @@ const Footer = () => {
         <div className="flex items-center space-x-4 mb-4 md:mb-0">
           <img
             src="/kishangarh-logo.svg"
-            alt="Kishangarh law college (CO-EDU) Logo"
+            alt={`${collegeName} Logo`}
             className="h-12"
           />
           <div className="flex space-x-3">
@@ -86,7 +92,7 @@ const Footer = () => {
       </div>
 
       <div className="text-center text-xs text-gray-700 pb-6">
-        ©Copyright 2025, Kishangarh law college (CO-EDU). All Rights Reserved
+        ©Copyright 2025, {collegeName}. All Rights Reserved
       </div>
     </footer>
   );

@@ -55,6 +55,7 @@ import SectionHeader from "../components/common/SectionHeader";
 import ActionButton from "../components/common/ActionButton";
 import FloatingButton from "../components/common/FloatingButton";
 import ApiService from "../services/api";
+import ApplyNowModal from "../components/ApplyNowModal";
 
 import {
   HERO_IMAGES,
@@ -76,6 +77,14 @@ const Home = () => {
   const [showTopBtn, scrollToTop] = useScrollToTop(200);
   const animatedAboutNumbers = useAnimatedNumbers(ABOUT_DATA);
   const animatedAchievementNumbers = useAnimatedNumbers(ACHIEVEMENT_DATA);
+
+  const selectedCollege = localStorage.getItem("selectedCollege");
+  const collegeName =
+    selectedCollege === "girls"
+      ? "Kishangarh Girls College"
+      : "Kishangarh law college (CO-EDU)";
+
+  const [showApplyModal, setShowApplyModal] = useState(false);
 
   const [hoveredStates, setHoveredStates] = useState({
     news: null,
@@ -437,14 +446,6 @@ const Home = () => {
                 <div className="flex">
                   <div>
                     <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-2xl">
-                      Kishangarh Girls College
-                    </h1>
-                    <p className="text-xl md:text-2xl text-blue-100 mb-6 drop-shadow-lg">
-                      Empowering Women Through Education
-                    </p>
-                  </div>
-                  <div>
-                    <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-2xl">
                       Kishangarh law college (CO-EDU)
                     </h1>
                     <p className="text-xl md:text-2xl text-blue-100 mb-6 drop-shadow-lg">
@@ -463,7 +464,7 @@ const Home = () => {
                     Student Login
                   </button>
                   <button
-                    onClick={() => scrollToSection('admissions')}
+                    onClick={() => setShowApplyModal(true)}
                     className="bg-white hover:bg-blue-50 text-blue-900 px-8 py-3 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
                   >
                     Apply Now
@@ -1044,6 +1045,12 @@ const Home = () => {
           />
         </div>
       </section>
+
+      <ApplyNowModal
+        isOpen={showApplyModal}
+        onClose={() => setShowApplyModal(false)}
+        collegeName={collegeName}
+      />
     </div>
   );
 };
