@@ -9,6 +9,7 @@ import StudentResult from './pages/StudentResult';
 import StudentAdmitCard from './pages/StudentAdmitCard';
 import StudentMessage from './pages/StudentMessage';
 import StudentProfile from './pages/StudentProfile';
+import Selectionpage from './pages/Selectionpage';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -42,8 +43,16 @@ const App = () => {
     <Router>
       <Routes>
         {/* Public Routes */}
-        <Route
+         <Route
           path="/"
+          element={
+            <PublicLayout>
+              <Selectionpage />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/Home"
           element={
             <PublicLayout>
               <Home />
@@ -52,7 +61,8 @@ const App = () => {
         />
 
         {/* Student Login (public) */}
-        <Route path="/student/login" element={<StudentLogin />} />
+        <Route path="/student/login" element={
+          <StudentLogin />} />
 
         {/* Protected Student Routes */}
         <Route
