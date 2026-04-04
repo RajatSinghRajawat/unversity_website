@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { FaChevronDown, FaBars, FaTimes, FaEnvelope, FaBell, FaUser, FaGraduationCap, FaBookOpen, FaHome, FaInfoCircle, FaUniversity, FaUsers, FaChartLine } from 'react-icons/fa';
 import { useAccordion } from '../hooks/useAccordion';
 import MobileAccordion from './navbar/MobileAccordion';
@@ -334,6 +335,12 @@ const Navbar = () => {
 
         <div className="flex items-center space-x-2 sm:space-x-4">
           <div className="hidden sm:flex items-center space-x-3">
+            <Link
+              to="/"
+              className="text-blue-900 font-semibold text-sm px-3 py-2 rounded-full border border-blue-300 hover:bg-blue-900 hover:text-white transition-all duration-300"
+            >
+              Change college
+            </Link>
             <button
               onClick={() => window.location.href = '/student/login'}
               className="bg-gradient-to-r from-green-600 to-green-700 text-white px-4 py-2 rounded-full hover:from-green-700 hover:to-green-800 transition-all duration-300 font-bold text-sm shadow-lg hover:shadow-xl hover:scale-105 flex items-center space-x-2"
@@ -414,6 +421,13 @@ const Navbar = () => {
           
           <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-green-50 rounded-xl border border-blue-200">
             <div className="grid grid-cols-1 gap-3">
+              <Link
+                to="/"
+                onClick={handleMenuClose}
+                className="w-full text-center text-blue-900 font-semibold text-sm px-4 py-3 rounded-full border-2 border-blue-300 hover:bg-blue-900 hover:text-white transition-all duration-300"
+              >
+                Change college
+              </Link>
               <button
                 onClick={() => window.location.href = '/student/login'}
                 className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white px-4 py-3 rounded-full hover:from-green-700 hover:to-green-800 transition-all duration-300 font-bold flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl"

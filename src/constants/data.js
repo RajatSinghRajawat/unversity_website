@@ -484,32 +484,44 @@ export const ADMISSION_CARDS = [
   {
     id: 1,
     title: "Admission Process",
-    image: "/images/WhatsApp Image 2025-11-29 at 9.27.17 AM.jpeg"
+    image: "/images/WhatsApp Image 2025-11-29 at 9.27.17 AM.jpeg",
+    details:
+      "Step-by-step guidance for applying: collect required documents, fill the application form online or at the campus, appear for counselling if applicable, and complete fee payment to confirm your seat. Our admissions desk is available on campus on working days for walk-in support."
   },
   {
     id: 2,
     title: "Scholarship Programs",
-    image: "/images/WhatsApp Image 2025-11-29 at 9.27.19 AM (1).jpeg"
+    image: "/images/WhatsApp Image 2025-11-29 at 9.27.19 AM (1).jpeg",
+    details:
+      "Merit-based and need-based scholarships may be available for eligible students. Criteria typically include academic performance and family income documentation. Contact the admissions office for current schemes, deadlines, and application forms for the academic year."
   },
   {
     id: 3,
     title: "Campus Tour",
-    image: "/images/WhatsApp Image 2025-11-29 at 9.27.19 AM (2).jpeg"
+    image: "/images/WhatsApp Image 2025-11-29 at 9.27.19 AM (2).jpeg",
+    details:
+      "Schedule a guided visit to see classrooms, library, laboratories, sports facilities, and hostels. Tours help you understand campus life and meet staff. Call 9649107150 to book a convenient date and time."
   },
   {
     id: 4,
     title: "Fee Structure",
-    image: "/images/WhatsApp Image 2025-11-29 at 9.27.20 AM (1).jpeg"
+    image: "/images/WhatsApp Image 2025-11-29 at 9.27.20 AM (1).jpeg",
+    details:
+      "Program-wise tuition, examination, and other fees are notified each academic year. Detailed fee schedules are available at the admissions office and in the prospectus. Instalment options, if any, are explained during counselling."
   },
   {
     id: 5,
     title: "Contact Admissions",
-    image: "/images/WhatsApp Image 2025-11-29 at 9.27.20 AM (2).jpeg"
+    image: "/images/WhatsApp Image 2025-11-29 at 9.27.20 AM (2).jpeg",
+    details:
+      "Phone: 9649107150. Email: kishangarhgirls@gmail.com, kishangarhlawcollege@gmail.com. Address: Devta Road, Bambora (Kishangarh), Alwar. Office hours are typically Monday to Saturday during working hours—call ahead for holidays."
   },
   {
     id: 6,
     title: "Download Brochure",
-    image: "/images/WhatsApp Image 2025-11-29 at 9.27.20 AM (3).jpeg"
+    image: "/images/WhatsApp Image 2025-11-29 at 9.27.20 AM (3).jpeg",
+    details:
+      "The digital brochure summarises programs, faculty, infrastructure, and admission timelines. Ask the admissions team for the latest PDF or printed copy. You can also visit the college website or social pages for updates and announcements."
   }
 ];
 

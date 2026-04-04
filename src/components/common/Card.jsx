@@ -12,10 +12,23 @@ const Card = ({
   isHovered = false,
   onHover,
   onLeave,
+  onImageClick,
   className = '',
   imageHeight = 'h-64',
   big = false
 }) => {
+  const imgClass = `card-image ${big ? 'h-80' : imageHeight}`;
+  const imageEl = (
+    <img
+      src={image}
+      alt={title}
+      className={`${imgClass} ${onImageClick ? 'cursor-pointer' : ''}`}
+      onError={(e) => {
+        e.target.src = "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&h=400&fit=crop";
+      }}
+    />
+  );
+
   return (
     <div
       className={`card ${className}`}
@@ -23,14 +36,18 @@ const Card = ({
       onMouseLeave={onLeave}
     >
       <div className="relative overflow-hidden">
-        <img
-          src={image}
-          alt={title}
-          className={`card-image ${big ? 'h-80' : imageHeight}`}
-          onError={(e) => {
-            e.target.src = "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&h=400&fit=crop";
-          }}
-        />
+        {onImageClick ? (
+          <button
+            type="button"
+            className="block w-full p-0 border-0 bg-transparent text-left"
+            onClick={onImageClick}
+            aria-label={`View details: ${title}`}
+          >
+            {imageEl}
+          </button>
+        ) : (
+          imageEl
+        )}
         {showArrow && (
           <button
             className={`absolute bottom-4 right-4 bg-yellow-400 text-black p-2 rounded-full shadow-lg transform transition-all duration-300 ${

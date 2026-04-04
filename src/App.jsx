@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
+import Homegirls from './pages/Homegirls';
 import StudentLogin from './pages/StudentLogin';
 import StudentHome from './pages/StudentHome';
 import StudentResult from './pages/StudentResult';
@@ -55,6 +56,14 @@ const App = () => {
           element={
             <PublicLayout>
               <Home />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/girls"
+          element={
+            <PublicLayout>
+              <Homegirls />
             </PublicLayout>
           }
         />

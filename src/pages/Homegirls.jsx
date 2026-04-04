@@ -56,6 +56,7 @@ import ActionButton from "../components/common/ActionButton";
 import FloatingButton from "../components/common/FloatingButton";
 import ApiService from "../services/api";
 import ApplyNowModal from "../components/ApplyNowModal";
+import CardDetailModal from "../components/common/CardDetailModal";
 
 import {
   HERO_IMAGES,
@@ -85,6 +86,32 @@ const Homegirls = () => {
       : "Kishangarh Girls College";
 
   const [showApplyModal, setShowApplyModal] = useState(false);
+  const [cardModal, setCardModal] = useState(null);
+
+  useEffect(() => {
+    localStorage.setItem("selectedCollege", "girls");
+  }, []);
+
+  const openCardDetailModal = (item, metaOverride) => {
+    const image = item.image || item.img;
+    const body =
+      item.details ||
+      item.desc ||
+      item.description ||
+      "For more information, contact the college office at 9649107150 or email kishangarhgirls@gmail.com.";
+    let meta = metaOverride;
+    if (meta === undefined && item.date && item.time) {
+      meta = `${item.date} · ${item.time}`;
+    }
+    setCardModal({
+      title: item.title,
+      image,
+      body,
+      meta: meta ?? null,
+    });
+  };
+
+  const closeCardDetailModal = () => setCardModal(null);
 
   const [hoveredStates, setHoveredStates] = useState({
     news: null,
@@ -339,8 +366,14 @@ const Homegirls = () => {
         handleViewMore('admissions');
         break;
       case 'readMoreNews':
-        // Show more news on same page
-        handleViewMore('news');
+        if (data) {
+          openCardDetailModal(
+            data,
+            `Published: ${new Date().toLocaleDateString()}`
+          );
+        } else {
+          handleViewMore('news');
+        }
         break;
       case 'readMoreItem':
         // Show expanded content for individual item
@@ -349,36 +382,19 @@ const Homegirls = () => {
         }
         break;
       case 'viewProgram':
-        // Navigate to specific program page
-        if (data) {
-          window.location.href = `/programs/${data.id}`;
-        }
+        if (data) openCardDetailModal(data);
         break;
       case 'viewEvent':
-        // Navigate to specific event page
-        if (data) {
-          window.location.href = `/events/${data.id}`;
-        }
+        if (data) openCardDetailModal(data);
         break;
       case 'viewFacility':
-        // Navigate to specific facility page
-        if (data) {
-          window.location.href = `/facilities/${data.id}`;
-        }
+        if (data) openCardDetailModal(data);
         break;
       case 'viewCampusLife':
-        // Navigate to specific campus life page
-        if (data) {
-          window.location.href = `/campus-life/${data.id}`;
-        }
+        if (data) openCardDetailModal(data);
         break;
       case 'viewAdmission':
-        // Navigate to registration form
-        if (data) {
-          window.location.href = `/admissions?admissionId=${encodeURIComponent(
-            data.id
-          )}`;
-        }
+        if (data) openCardDetailModal(data);
         break;
       case 'downloadNews':
         // Download news article or related content
@@ -595,17 +611,32 @@ const Homegirls = () => {
               onMouseLeave={() => handleLeave("news")}
             >
               <div className="relative overflow-hidden">
-                <img
-                  src={card.image}
-                  alt={card.title}
-                  className={`card-image ${card.big ? "h-80" : "h-64"} group-hover:scale-110 transition-transform duration-500`}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <button
+                  type="button"
+                  className="block w-full p-0 border-0 bg-transparent cursor-pointer"
+                  onClick={() =>
+                    openCardDetailModal(
+                      card,
+                      `Published: ${new Date().toLocaleDateString()}`
+                    )
+                  }
+                >
+                  <img
+                    src={card.image}
+                    alt={card.title}
+                    className={`card-image ${card.big ? "h-80" : "h-64"} group-hover:scale-110 transition-transform duration-500`}
+                  />
+                </button>
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                 {/* Interactive buttons */}
-                <div className="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute top-4 right-4 z-20 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <button
-                    onClick={() => handleLike(card.id, "news")}
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleLike(card.id, "news");
+                    }}
                     className={`p-2 rounded-full shadow-lg transition-all duration-200 ${likedItems.has(`news-${card.id}`)
                       ? 'bg-red-500 text-white'
                       : 'bg-white/80 text-gray-700 hover:bg-red-500 hover:text-white'
@@ -614,7 +645,11 @@ const Homegirls = () => {
                     <FaHeart className="text-sm" />
                   </button>
                   <button
-                    onClick={() => handleDynamicAction('shareContent', card)}
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDynamicAction("shareContent", card);
+                    }}
                     className="p-2 rounded-full bg-white/80 text-gray-700 hover:bg-blue-500 hover:text-white shadow-lg transition-all duration-200"
                   >
                     <FaShare className="text-sm" />
@@ -622,7 +657,8 @@ const Homegirls = () => {
                 </div>
 
                 <button
-                  className={`absolute bottom-4 right-4 bg-yellow-400 text-black p-3 rounded-full shadow-lg transform transition-all duration-300 hover:bg-yellow-500 ${hoveredStates.news === card.id
+                  type="button"
+                  className={`absolute bottom-4 right-4 z-20 bg-yellow-400 text-black p-3 rounded-full shadow-lg transform transition-all duration-300 hover:bg-yellow-500 ${hoveredStates.news === card.id
                     ? "rotate-45 opacity-100 scale-110"
                     : "opacity-0"
                     }`}
@@ -702,21 +738,27 @@ const Homegirls = () => {
           {PROGRAM_CARDS.slice(0, itemsToShow.programs).map((card) => (
             <div
               key={card.id}
-              className="card group relative overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer"
+              className="card group relative overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
               onMouseEnter={() => handleHover("program", card.id)}
               onMouseLeave={() => handleLeave("program")}
-              onClick={() => handleDynamicAction('viewProgram', card)}
             >
               <div className="relative overflow-hidden">
-                <img
-                  src={card.image}
-                  alt={card.title}
-                  className="card-image h-64 group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <button
+                  type="button"
+                  className="block w-full p-0 border-0 bg-transparent cursor-pointer"
+                  onClick={() => openCardDetailModal(card)}
+                >
+                  <img
+                    src={card.image}
+                    alt={card.title}
+                    className="card-image h-64 group-hover:scale-110 transition-transform duration-500"
+                  />
+                </button>
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                 <button
-                  className={`absolute bottom-4 right-4 bg-yellow-400 text-black p-3 rounded-full shadow-lg transform transition-all duration-300 hover:bg-yellow-500 ${hoveredStates.program === card.id
+                  type="button"
+                  className={`absolute bottom-4 right-4 z-20 bg-yellow-400 text-black p-3 rounded-full shadow-lg transform transition-all duration-300 hover:bg-yellow-500 ${hoveredStates.program === card.id
                     ? "rotate-45 opacity-100 scale-110"
                     : "opacity-0"
                     }`}
@@ -760,6 +802,7 @@ const Homegirls = () => {
                   desc={slide.desc}
                   imageHeight="h-64"
                   className="text-center"
+                  onImageClick={() => openCardDetailModal(slide)}
                 />
               </div>
             ))}
@@ -773,24 +816,30 @@ const Homegirls = () => {
           {EVENTS.slice(0, itemsToShow.events).map((event) => (
             <div
               key={event.id}
-              className="card group relative overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer"
+              className="card group relative overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
               onMouseEnter={() => handleHover("event", event.id)}
               onMouseLeave={() => handleLeave("event")}
-              onClick={() => handleDynamicAction('viewEvent', event)}
             >
               <div className="relative overflow-hidden">
-                <img
-                  src={event.img}
-                  alt={event.title}
-                  className="card-image h-48 group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute top-2 left-2 bg-gray-800 text-white px-3 py-1 rounded-md text-sm font-bold">
+                <button
+                  type="button"
+                  className="block w-full p-0 border-0 bg-transparent cursor-pointer"
+                  onClick={() => openCardDetailModal(event)}
+                >
+                  <img
+                    src={event.img}
+                    alt={event.title}
+                    className="card-image h-48 group-hover:scale-110 transition-transform duration-500"
+                  />
+                </button>
+                <div className="pointer-events-none absolute top-2 left-2 bg-gray-800 text-white px-3 py-1 rounded-md text-sm font-bold">
                   {event.date}
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                 <button
-                  className={`absolute bottom-4 right-4 bg-yellow-400 text-black p-3 rounded-full shadow-lg transform transition-all duration-300 hover:bg-yellow-500 ${hoveredStates.event === event.id
+                  type="button"
+                  className={`absolute bottom-4 right-4 z-20 bg-yellow-400 text-black p-3 rounded-full shadow-lg transform transition-all duration-300 hover:bg-yellow-500 ${hoveredStates.event === event.id
                     ? "rotate-45 opacity-100 scale-110"
                     : "opacity-0"
                     }`}
@@ -847,21 +896,27 @@ const Homegirls = () => {
           {RESEARCH_DATA.slice(0, itemsToShow.facilities).map((card) => (
             <div
               key={card.id}
-              className="card group relative overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer"
+              className="card group relative overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
               onMouseEnter={() => handleHover("research", card.id)}
               onMouseLeave={() => handleLeave("research")}
-              onClick={() => handleDynamicAction('viewFacility', card)}
             >
               <div className="relative overflow-hidden">
-                <img
-                  src={card.image}
-                  alt={card.title}
-                  className="card-image h-64 group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <button
+                  type="button"
+                  className="block w-full p-0 border-0 bg-transparent cursor-pointer"
+                  onClick={() => openCardDetailModal(card)}
+                >
+                  <img
+                    src={card.image}
+                    alt={card.title}
+                    className="card-image h-64 group-hover:scale-110 transition-transform duration-500"
+                  />
+                </button>
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                 <button
-                  className={`absolute bottom-4 right-4 bg-yellow-400 text-black p-3 rounded-full shadow-lg transform transition-all duration-300 hover:bg-yellow-500 ${hoveredStates.research === card.id
+                  type="button"
+                  className={`absolute bottom-4 right-4 z-20 bg-yellow-400 text-black p-3 rounded-full shadow-lg transform transition-all duration-300 hover:bg-yellow-500 ${hoveredStates.research === card.id
                     ? "rotate-45 opacity-100 scale-110"
                     : "opacity-0"
                     }`}
@@ -917,19 +972,25 @@ const Homegirls = () => {
           {CAMPUS_LIFE_DATA.slice(0, itemsToShow.campusLife).map((item) => (
             <div
               key={item.id}
-              className="card group relative overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer"
-              onClick={() => handleDynamicAction('viewCampusLife', item)}
+              className="card group relative overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
             >
               <div className="relative overflow-hidden">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="card-image h-64 group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <button
+                  type="button"
+                  className="block w-full p-0 border-0 bg-transparent cursor-pointer"
+                  onClick={() => openCardDetailModal(item)}
+                >
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="card-image h-64 group-hover:scale-110 transition-transform duration-500"
+                  />
+                </button>
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                 <button
-                  className="absolute bottom-4 right-4 bg-yellow-400 text-black p-3 rounded-full shadow-lg transform transition-all duration-300 hover:bg-yellow-500 opacity-0 group-hover:opacity-100 rotate-45 scale-110"
+                  type="button"
+                  className="absolute bottom-4 right-4 z-20 bg-yellow-400 text-black p-3 rounded-full shadow-lg transform transition-all duration-300 hover:bg-yellow-500 opacity-0 group-hover:opacity-100 rotate-45 scale-110"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDynamicAction('viewCampusLife', item);
@@ -1018,21 +1079,27 @@ const Homegirls = () => {
           {ADMISSION_CARDS.slice(0, itemsToShow.admissions).map((card) => (
             <div
               key={card.id}
-              className="card group relative overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer"
+              className="card group relative overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
               onMouseEnter={() => handleHover("card", card.id)}
               onMouseLeave={() => handleLeave("card")}
-              onClick={() => handleDynamicAction('viewAdmission', card)}
             >
               <div className="relative overflow-hidden">
-                <img
-                  src={card.image}
-                  alt={card.title}
-                  className="card-image h-64 group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <button
+                  type="button"
+                  className="block w-full p-0 border-0 bg-transparent cursor-pointer"
+                  onClick={() => openCardDetailModal(card)}
+                >
+                  <img
+                    src={card.image}
+                    alt={card.title}
+                    className="card-image h-64 group-hover:scale-110 transition-transform duration-500"
+                  />
+                </button>
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                 <button
-                  className={`absolute bottom-4 right-4 bg-yellow-400 text-black p-3 rounded-full shadow-lg transform transition-all duration-300 hover:bg-yellow-500 ${hoveredStates.card === card.id
+                  type="button"
+                  className={`absolute bottom-4 right-4 z-20 bg-yellow-400 text-black p-3 rounded-full shadow-lg transform transition-all duration-300 hover:bg-yellow-500 ${hoveredStates.card === card.id
                     ? "rotate-45 opacity-100 scale-110"
                     : "opacity-0"
                     }`}
@@ -1064,6 +1131,15 @@ const Homegirls = () => {
         isOpen={showApplyModal}
         onClose={() => setShowApplyModal(false)}
         collegeName={collegeName}
+      />
+
+      <CardDetailModal
+        isOpen={!!cardModal}
+        onClose={closeCardDetailModal}
+        title={cardModal?.title}
+        image={cardModal?.image}
+        body={cardModal?.body}
+        meta={cardModal?.meta}
       />
     </div>
   );
