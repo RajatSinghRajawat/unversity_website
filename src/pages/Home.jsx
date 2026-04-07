@@ -72,8 +72,22 @@ import {
   ADMISSION_CARDS,
 } from "../constants/data";
 
+const lawImageModules = import.meta.glob("./imageslaw/*.{png,jpg,jpeg,webp}", {
+  eager: true,
+});
+
+const LAW_HERO_IMAGES = Object.entries(lawImageModules)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([, module]) => module.default);
+
 const Home = () => {
-  const currentImage = useSlider(HERO_IMAGES.length, 4000);
+  const getLawImage = (index, fallback) => {
+    if (LAW_HERO_IMAGES.length === 0) return fallback;
+    return LAW_HERO_IMAGES[index % LAW_HERO_IMAGES.length];
+  };
+
+  const homeHeroImages = LAW_HERO_IMAGES.length > 0 ? LAW_HERO_IMAGES : HERO_IMAGES;
+  const currentImage = useSlider(homeHeroImages.length, 4000);
   const currentWhySlide = useSlider(WHY_GYAN_VIHAR_SLIDES.length, 4000);
   const [showTopBtn, scrollToTop] = useScrollToTop(200);
   const animatedAboutNumbers = useAnimatedNumbers(ABOUT_DATA);
@@ -445,10 +459,48 @@ const Home = () => {
     return animatedValue + (original.includes("+") ? "+" : "");
   };
 
+  const newsCardsWithLawImages = NEWS_CARDS.map((card, index) => ({
+    ...card,
+    image: getLawImage(index, card.image),
+  }));
+  const programCardsWithLawImages = PROGRAM_CARDS.map((card, index) => ({
+    ...card,
+    image: getLawImage(index, card.image),
+  }));
+  const whySlidesWithLawImages = WHY_GYAN_VIHAR_SLIDES.map((slide, index) => ({
+    ...slide,
+    img: getLawImage(index, slide.img),
+  }));
+  const eventsWithLawImages = EVENTS.map((event, index) => ({
+    ...event,
+    img: getLawImage(index, event.img),
+  }));
+  const facilitiesWithLawImages = RESEARCH_DATA.map((card, index) => ({
+    ...card,
+    image: getLawImage(index, card.image),
+  }));
+  const campusLifeWithLawImages = CAMPUS_LIFE_DATA.map((item, index) => ({
+    ...item,
+    image: getLawImage(index, item.image),
+  }));
+  const admissionCardsWithLawImages = ADMISSION_CARDS.map((card, index) => ({
+    ...card,
+    image: getLawImage(index, card.image),
+  }));
+  const testimonialTabsWithLawImages = Object.fromEntries(
+    Object.entries(TESTIMONIALS).map(([tab, list]) => [
+      tab,
+      list.map((item, index) => ({
+        ...item,
+        image: getLawImage(index, item.image),
+      })),
+    ])
+  );
+
   return (
     <div className="relative bg-gray-50">
       <div className="hero-slider relative">
-        {HERO_IMAGES.map((img, index) => (
+        {homeHeroImages.map((img, index) => (
           <div
             key={index}
             className={`absolute inset-0 transition-opacity duration-1000 ${index === currentImage ? "opacity-100 z-10" : "opacity-0 z-0"
@@ -502,7 +554,7 @@ const Home = () => {
         ))}
         {/* Hero Navigation Dots */}
         <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-20 flex space-x-2">
-          {HERO_IMAGES.map((_, index) => (
+          {homeHeroImages.map((_, index) => (
             <button
               key={index}
               onClick={() => {
@@ -595,7 +647,7 @@ const Home = () => {
           subtitle="The latest news from Kishangarh law college (CO-EDU)"
         />
         <div className="news-grid max-w-7xl mx-auto px-4">
-          {NEWS_CARDS.slice(0, itemsToShow.news).map((card) => (
+          {newsCardsWithLawImages.slice(0, itemsToShow.news).map((card) => (
             <div
               key={card.id}
               className={`card ${card.big ? "news-big" : ""} group relative overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2`}
@@ -730,7 +782,7 @@ const Home = () => {
           subtitle="Excellence and virtue delivered through a pedagogy prepared by subject experts and industry leaders"
         />
         <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-4">
-          {PROGRAM_CARDS.slice(0, itemsToShow.programs).map((card) => (
+          {programCardsWithLawImages.slice(0, itemsToShow.programs).map((card) => (
             <div
               key={card.id}
               className="card group relative overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
@@ -789,7 +841,7 @@ const Home = () => {
             className="why-slider"
             style={{ transform: `translateX(-${currentWhySlide * 33.333}%)` }}
           >
-            {WHY_GYAN_VIHAR_SLIDES.map((slide, index) => (
+            {whySlidesWithLawImages.map((slide, index) => (
               <div key={index} className="why-slide">
                 <Card
                   image={slide.img}
@@ -808,7 +860,7 @@ const Home = () => {
       <section id="events" className="py-16 bg-gray-100">
         <SectionHeader title="Don't Miss Out" subtitle="Upcoming Events" />
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 px-4">
-          {EVENTS.slice(0, itemsToShow.events).map((event) => (
+          {eventsWithLawImages.slice(0, itemsToShow.events).map((event) => (
             <div
               key={event.id}
               className="card group relative overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
@@ -885,7 +937,7 @@ const Home = () => {
       <section id="facilities" className="py-16 bg-gray-100">
         <SectionHeader title="College Facilities" />
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 px-4">
-          {RESEARCH_DATA.slice(0, itemsToShow.facilities).map((card) => (
+          {facilitiesWithLawImages.slice(0, itemsToShow.facilities).map((card) => (
             <div
               key={card.id}
               className="card group relative overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
@@ -961,7 +1013,7 @@ const Home = () => {
       <section id="campus-life" className="py-16 bg-gray-100">
         <SectionHeader title="Campus Life" />
         <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
-          {CAMPUS_LIFE_DATA.slice(0, itemsToShow.campusLife).map((item) => (
+          {campusLifeWithLawImages.slice(0, itemsToShow.campusLife).map((item) => (
             <div
               key={item.id}
               className="card group relative overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
@@ -1038,7 +1090,7 @@ const Home = () => {
             speed={1000}
             className="mySwiper"
           >
-            {TESTIMONIALS[activeTab].map((testimonial) => (
+            {testimonialTabsWithLawImages[activeTab].map((testimonial) => (
               <SwiperSlide key={testimonial.id}>
                 <div className="card flex flex-col md:flex-row items-center p-6 mx-4">
                   <div className="w-full md:w-1/3 mb-4 md:mb-0">
@@ -1068,7 +1120,7 @@ const Home = () => {
           subtitle="An extraordinary freedom of opportunity to explore, to collaborate, and to challenge yourself"
         />
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 px-4">
-          {ADMISSION_CARDS.slice(0, itemsToShow.admissions).map((card) => (
+          {admissionCardsWithLawImages.slice(0, itemsToShow.admissions).map((card) => (
             <div
               key={card.id}
               className="card group relative overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
