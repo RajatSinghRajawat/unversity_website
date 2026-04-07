@@ -12,6 +12,7 @@ const generateEnrollmentId = () => {
   const stamp = Date.now().toString().slice(-7);
   return `ENR-${stamp}-${rand}`;
 };
+// llllll
 
 const Admissions = () => {
   const location = useLocation();
